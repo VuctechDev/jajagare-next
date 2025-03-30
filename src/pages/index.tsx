@@ -69,7 +69,7 @@ export default function Home() {
           </button>
         </Link>
       </div>
-      <Link href="/backoffice">BO</Link>
+      {/* <Link href="/backoffice">BO</Link> */}
     </div>
   );
 }

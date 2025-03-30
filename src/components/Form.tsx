@@ -1,6 +1,7 @@
 import { OrderType } from "@/@types";
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import Snackbar from "./Snackbar";
 
 type FormValues = {
   quantity: number;
@@ -80,11 +81,12 @@ const DisplayError = ({
 };
 
 export default function OrderForm() {
-  const deliveryDays = getNextWeekdays([2, 6], 4);
+  const deliveryDays = useMemo(() => getNextWeekdays([2, 6], 4), []);
+  const [open, setOpen] = useState(false);
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     defaultValues: {
       quantity: 20,
@@ -98,13 +100,25 @@ export default function OrderForm() {
   });
 
   const onSubmit = async (data: FormValues) => {
-    console.log("Form Data:", data);
-    await fetch("/api/orders", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    try {
+      await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          product: 1000,
+          quantity: +data.quantity,
+          price: 0.5,
+          address: data.address,
+          email: data.email ?? "",
+          phone: data.phone,
+          name: data.name,
+          comment: data.name ?? "",
+          delivery: deliveryDays[data.delivery].toISOString(),
+        }),
+      });
+      saveToLocalStorage({
         product: 1000,
         quantity: +data.quantity,
         price: 0.5,
@@ -114,19 +128,11 @@ export default function OrderForm() {
         name: data.name,
         comment: data.name ?? "",
         delivery: deliveryDays[data.delivery].toISOString(),
-      }),
-    });
-    saveToLocalStorage({
-      product: 1000,
-      quantity: +data.quantity,
-      price: 0.5,
-      address: data.address,
-      email: data.email ?? "",
-      phone: data.phone,
-      name: data.name,
-      comment: data.name ?? "",
-      delivery: deliveryDays[data.delivery].toISOString(),
-    });
+      });
+      setOpen(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -143,7 +149,7 @@ export default function OrderForm() {
             className="px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
           />
           <DisplayError
-            message={`${item.name} is required`}
+            message={`${item.label} je obavezno polje!`}
             show={!!errors[item.name]}
           />
         </React.Fragment>
@@ -160,7 +166,10 @@ export default function OrderForm() {
           </option>
         ))}
       </select>
-      <DisplayError message="Dostava is required" show={!!errors.delivery} />
+      <DisplayError
+        message="Datum Dostave je obavezno polje!"
+        show={!!errors.delivery}
+      />
 
       <select
         {...register("quantity", { required: true, min: 1 })}
@@ -172,14 +181,11 @@ export default function OrderForm() {
             {i * 10 + 10} jaja / {i * 5 + 5}KM
           </option>
         ))}
-        {/* <option value={10}>10 jaja / 5KM</option>
-        <option value={20} selected>
-          20 jaja / 10KM
-        </option>
-        <option value={30}>30 jaja</option>
-        <option value={50}> 50 jaja</option> */}
       </select>
-      <DisplayError message="Address is required" show={!!errors.address} />
+      <DisplayError
+        message="Kolicina je obavezno polje"
+        show={!!errors.address}
+      />
 
       {/* <input
         type="email"
@@ -205,10 +211,22 @@ export default function OrderForm() {
 
       <button
         type="submit"
-        className="px-6 py-3 mt-4 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-semibold shadow-md transition-all duration-300 cursor-pointer"
+        disabled={isSubmitting}
+        className={`px-6 py-3 mt-4 rounded-2xl text-white font-semibold shadow-md transition-all duration-300 cursor-pointer
+          ${
+            isSubmitting
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-green-600 hover:bg-green-700"
+          }
+        `}
       >
-        Poruči
+        {isSubmitting ? "Slanje..." : "Poruči"}
       </button>
+      <Snackbar
+        open={open}
+        message="Vaša narudžba je uspješno poslata!"
+        onClose={() => setOpen(false)}
+      />
     </form>
   );
 }
