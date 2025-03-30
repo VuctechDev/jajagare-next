@@ -19,6 +19,7 @@ export default function Home() {
           name="description"
           content="Naša domaća jaja dolaze sa porodične farme iz slobodnog uzgoja, pažljivo sakupljena i dostavljena na vašu adresu. Besplatna dostava, Banja Luka."
         />
+        <link rel="icon" href="/favicon.png" sizes="32x32" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="author" content="Vuctech" />
         <meta property="og:title" content="Domaća jaja iz slobodnog uzgoja" />
@@ -26,7 +27,7 @@ export default function Home() {
           property="og:description"
           content="Svježa domaća jaja iz slobodnog uzgoja sa besplatnom dostavom na kućnu adresu."
         />
-        <meta property="og:image" content="/cover.jpg" />{" "}
+        <meta property="og:image" content="/cover.png" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Domaća jaja iz slobodnog uzgoja" />
@@ -34,7 +35,7 @@ export default function Home() {
           name="twitter:description"
           content="Poručite domaća jaja sa besplatnom dostavom."
         />
-        <meta name="twitter:image" content="/cover.jpg" />
+        <meta name="twitter:image" content="/cover.png" />
       </Head>
       <div
         className={`relative w-full flex flex-col items-center justify-start text-black min-h-screen pb-20 gap-4 bg-white ${poppins.className} `}
@@ -79,7 +80,7 @@ export default function Home() {
           Domaća organska jaja iz slobodnog uzgoja
         </h1>
         <h5
-          className={`text-[14px] md:text-[16px] max-w-[1000px] text-center text-black w-full`}
+          className={`text-[14px] md:text-[16px] px-3 max-w-[1000px] text-center text-black w-full`}
         >
           Naša organska jaja dolaze sa porodične farme iz slobodnog uzgoja, gde
           koke uživaju u prirodnom okruženju. Svako jaje je pažljivo sakupljeno
@@ -89,11 +90,11 @@ export default function Home() {
           className={`w-full flex flex-col mt-4 items-center justify-center`}
         >
           <p
-            className={`text-[16px] md:text-[16px] font-bold text-center text-black w-full`}
+            className={`text-[16px] md:text-[16px] px-3 font-bold text-center text-black w-full`}
           >
             Besplatna dostava na kućnu adresu na teritoriji Banja Luke!
           </p>
-          <Link href="/order" className="mt-4">
+          <Link href="/order" className="mt-8">
             <button className="ml-3 text-[18px] px-6 py-3 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-semibold shadow-md transition-all duration-300 cursor-pointer">
               Poruči
             </button>

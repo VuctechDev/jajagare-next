@@ -16,7 +16,7 @@ export default function OrderPage() {
       <h5
         className={`text-[16px] md:text-[20px] max-w-[1000px] text-center text-black w-full`}
       >
-        Besplatna dostava na Vašu adresu svakog utorka i subote u prijepodnevnim časovima. Za sada dostavu vrs.
+        Besplatna dostava na Vašu adresu na teritoriji Banja Luke svakog utorka i subote u prijepodnevnim časovima.
       </h5>
       <h5
         className={`text-[16px] md:text-[18px] my-6 text-center font-semibold text-black w-full`}
