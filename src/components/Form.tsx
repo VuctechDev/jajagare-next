@@ -1,3 +1,4 @@
+import { OrderType } from "@/@types";
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -15,7 +16,7 @@ type FormValues = {
 export const getNextWeekdays = (targetDays: number[], countPerDay: number) => {
   const result: Date[] = [];
   const today = new Date();
-  let date = new Date(today);
+  const date = new Date(today);
 
   while (result.length < targetDays.length * countPerDay) {
     date.setDate(date.getDate() + 1);
@@ -37,7 +38,7 @@ export const formatDate = (date: Date) => {
   return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 };
 
-const saveToLocalStorage = (data: any) => {
+const saveToLocalStorage = (data: OrderType) => {
   if (typeof window !== "undefined") {
     window.localStorage.setItem("formData", JSON.stringify(data));
   }
@@ -115,7 +116,17 @@ export default function OrderForm() {
         delivery: deliveryDays[data.delivery].toISOString(),
       }),
     });
-    saveToLocalStorage(data);
+    saveToLocalStorage({
+      product: 1000,
+      quantity: +data.quantity,
+      price: 0.5,
+      address: data.address,
+      email: data.email ?? "",
+      phone: data.phone,
+      name: data.name,
+      comment: data.name ?? "",
+      delivery: deliveryDays[data.delivery].toISOString(),
+    });
   };
 
   return (

@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../lib/prisma";
 
-const date = "2025-04-08";
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

@@ -19,6 +19,7 @@ export default async function handler(
       });
       return res.status(200).json({ data: updatedOrder });
     } catch (error) {
+      console.error(error);
       return res.status(404).json({ error: "Order not found" });
     }
   }
@@ -30,6 +31,7 @@ export default async function handler(
       });
       return res.status(204).end();
     } catch (error) {
+      console.error(error);
       return res.status(404).json({ error: "Order not found" });
     }
   }

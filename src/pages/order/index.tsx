@@ -1,7 +1,7 @@
 import Form from "@/components/Form";
 import Instagram from "@/icons/Instagram";
 import Viber from "@/icons/Viber";
-import { Geist, Geist_Mono, Exo_2 } from "next/font/google";
+import { Exo_2 } from "next/font/google";
 
 const poppins = Exo_2({
   subsets: ["latin"],
