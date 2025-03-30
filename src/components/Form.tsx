@@ -45,6 +45,24 @@ const saveToLocalStorage = (data: OrderType) => {
   }
 };
 
+const getFromLocalStorage = () => {
+  if (typeof window !== "undefined") {
+    const stored = window.localStorage.getItem("formData");
+    if (stored) {
+      return JSON.parse(stored);
+    }
+    return {
+      quantity: 20,
+      //   address: "Jagare",
+      //   email: "customer@example.com",
+      //   phone: "065678765",
+      //   name: "Slavisa Travar",
+      //   comment: "Prije podne",
+      //   delivery: 0,
+    };
+  }
+};
+
 const fields: {
   label: string;
   name: keyof FormValues;
@@ -88,15 +106,7 @@ export default function OrderForm() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
-    defaultValues: {
-      quantity: 20,
-      //   address: "Jagare",
-      //   email: "customer@example.com",
-      //   phone: "065678765",
-      //   name: "Slavisa Travar",
-      //   comment: "Prije podne",
-      //   delivery: 0,
-    },
+    defaultValues: getFromLocalStorage(),
   });
 
   const onSubmit = async (data: FormValues) => {
@@ -127,7 +137,7 @@ export default function OrderForm() {
         phone: data.phone,
         name: data.name,
         comment: data.name ?? "",
-        delivery: deliveryDays[data.delivery].toISOString(),
+        delivery: "",
       });
       setOpen(true);
     } catch (error) {

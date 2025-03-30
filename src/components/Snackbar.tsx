@@ -11,7 +11,7 @@ export default function Snackbar({
   message,
   open,
   onClose,
-  duration = 3000,
+  duration = 6000,
 }: SnackbarProps) {
   const [visible, setVisible] = useState(false);
 
@@ -20,7 +20,7 @@ export default function Snackbar({
       setVisible(true);
       const timer = setTimeout(() => {
         setVisible(false);
-        setTimeout(() => onClose(), 300); // wait for transition to finish
+        setTimeout(() => onClose(), 300);
       }, duration);
       return () => clearTimeout(timer);
     }
