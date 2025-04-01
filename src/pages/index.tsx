@@ -1,3 +1,4 @@
+// import Navigation from "@/components/backoffice/Navigation";
 import { Exo_2 } from "next/font/google";
 import Head from "next/head";
 import Link from "next/link";
@@ -73,7 +74,7 @@ export default function Home() {
             ></path>
           </svg>
         </div>
-
+        {/* <Navigation /> */}
         <h1
           className={`text-[26px] md:text-[50px]  text-center text-black font-semibold font-sans`}
         >

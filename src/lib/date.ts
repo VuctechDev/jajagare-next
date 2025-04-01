@@ -5,8 +5,20 @@ const getNextWeekdays = (targetDays: number[], countPerDay: number) => {
 
   while (result.length < targetDays.length * countPerDay) {
     date.setDate(date.getDate() + 1);
+
     if (targetDays.includes(date.getDay())) {
-      result.push(new Date(date));
+      const utcDate = new Date(
+        Date.UTC(
+          date.getFullYear(),
+          date.getMonth(),
+          date.getDate(),
+          12,
+          0,
+          0,
+          0
+        )
+      );
+      result.push(utcDate);
     }
   }
 
