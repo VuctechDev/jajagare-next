@@ -15,7 +15,7 @@ export default async function handler(
         createdAt: getDateRange(date as string),
       },
     });
-    const result = await prisma.orders.aggregate({
+    const total = await prisma.orders.aggregate({
       _sum: {
         quantity: true,
       },
@@ -23,7 +23,7 @@ export default async function handler(
         createdAt: getDateRange(date as string),
       },
     });
-    return res.json({ data: orders, total: result._sum.quantity ?? 0 });
+    return res.json({ data: orders, total: total._sum.quantity ?? 0 });
   }
 
   if (req.method === "POST") {

@@ -1,5 +1,6 @@
 import { OrderType } from "@/@types";
 import Navigation from "@/components/backoffice/Navigation";
+import OrderStatus from "@/components/backoffice/Status";
 import Viber from "@/icons/Viber";
 import { getDeliveryDays, getDeliveryDisplayDate } from "@/lib/date";
 import { useEffect, useState } from "react";
@@ -11,22 +12,26 @@ const updateItem = async (orderId: string) => {
 };
 
 export default function DeliveryPage() {
-  const [data, setData] = useState<OrderType[]>([]);
+  const [data, setData] = useState<{ data: OrderType[]; total: number }>({
+    data: [],
+    total: 0,
+  });
   const [deliveryDays] = useState<Date[]>(() => getDeliveryDays());
   const [delivery, setDelivery] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const get = async () => {
       const response = await fetch(`/api/orders/delivery?date=${delivery}`);
       const data = await response.json();
-      setData(data.data);
+      setLoading(false);
+      setData(data);
     };
     if (delivery) {
+      setLoading(true);
       get();
     }
-  }, [delivery]);
-
-  const total = data.reduce((agg, value: OrderType) => agg + value.quantity, 0);
+  }, [delivery, setLoading]);
 
   return (
     <div className="">
@@ -42,34 +47,49 @@ export default function DeliveryPage() {
           </button>
         ))}
       </div>
-      <h2 className="p-2"> UKUPNO: {total}</h2>
-      <div>
-        {data.map((item: OrderType) => (
-          <div
-            key={item.id}
-            className="flex items-center p-2 border-b border-dark-500"
-          >
-            {item.name}, {item.address}, {item.phone} : {item.quantity} komada
-            <a
-              href={`viber://chat?number=${
-                item.phone?.startsWith("+")
-                  ? item.phone
-                  : "+387" + item.phone?.slice(1)
-              }`}
-              target="_blank"
-              rel="noopener noreferrer"
+
+      {loading ? (
+        <h2>Ucitavanje...</h2>
+      ) : (
+        <div>
+          <h2 className="p-2">
+            UKUPNO KOMADA: {data.total}, PARA: {data.total * 0.5}KM
+          </h2>
+          {data.data.map((item: OrderType) => (
+            <div
+              key={item.id}
+              className="flex h-[50px] items-center p-2 border-b border-dark-500"
             >
-              <Viber />
-            </a>
-            <button
-              className="ml-14 text-[14px] px-4 py-2 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-semibold shadow-md transition-all duration-300 cursor-pointer"
-              onClick={() => updateItem(item.id ?? "")}
-            >
-              Dostavljeno
-            </button>
-          </div>
-        ))}
-      </div>
+              <div className="flex w-full justify-start items-center">
+                {item.name}, {item.address}, {item.phone} : {item.quantity}{" "}
+                komada <OrderStatus status={item.status} />
+              </div>
+
+              <div className="flex w-full justify-end items-center">
+                <a
+                  href={`viber://chat?number=${
+                    item.phone?.startsWith("+")
+                      ? item.phone
+                      : "+387" + item.phone?.slice(1)
+                  }`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Viber />
+                </a>
+                {item.status === "open" && (
+                  <button
+                    className="ml-14 text-[14px] px-4 py-2 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-semibold shadow-md transition-all duration-300 cursor-pointer"
+                    onClick={() => updateItem(item.id ?? "")}
+                  >
+                    Dostavljeno
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

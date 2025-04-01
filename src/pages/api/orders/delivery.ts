@@ -11,10 +11,19 @@ export default async function handler(
     const orders = await prisma.orders.findMany({
       where: {
         delivery: getDateRange(date as string),
-        status: "open",
+        // status: "open",
       },
     });
-    return res.json({ data: orders });
+    const total = await prisma.orders.aggregate({
+      _sum: {
+        quantity: true,
+      },
+      where: {
+        delivery: getDateRange(date as string),
+        // status: "open",
+      },
+    });
+    return res.json({ data: orders, total: total._sum.quantity ?? 0 });
   }
 
   res.setHeader("Allow", ["GET", "POST"]);
