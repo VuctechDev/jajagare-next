@@ -1,22 +1,29 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../lib/prisma";
+import prisma from "../../../lib/prisma";
+import { sendNotifEmail } from "@/lib/resend";
+import { getDateRange } from "@/lib/date";
+import { handleUser } from "@/lib/user";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    const { delivery } = req.query;
+    const { date } = req.query;
     const orders = await prisma.orders.findMany({
       where: {
-        delivery: {
-          gte: new Date(`${delivery}T00:00:00.000Z`),
-          lt: new Date(`${delivery}T23:59:59.999Z`),
-        },
-        status: "open",
+        createdAt: getDateRange(date as string),
       },
     });
-    return res.json({ data: orders });
+    const result = await prisma.orders.aggregate({
+      _sum: {
+        quantity: true,
+      },
+      where: {
+        createdAt: getDateRange(date as string),
+      },
+    });
+    return res.json({ data: orders, total: result._sum.quantity ?? 0 });
   }
 
   if (req.method === "POST") {
@@ -25,7 +32,6 @@ export default async function handler(
       quantity,
       price,
       address,
-      email,
       phone,
       name,
       comment,
@@ -37,13 +43,14 @@ export default async function handler(
         quantity,
         price,
         address,
-        email,
         phone,
         name,
         comment,
         delivery: new Date(delivery),
       },
     });
+    await handleUser(req.body);
+    sendNotifEmail.order(req.body);
     return res.status(201).json(order);
   }
 

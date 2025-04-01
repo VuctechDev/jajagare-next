@@ -1,7 +1,8 @@
-import { OrderType } from "@/@types";
 import React, { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import Snackbar from "./Snackbar";
+import { getDeliveryDays, getDeliveryDisplayDate } from "@/lib/date";
+import { storage } from "@/lib/storage";
 
 type FormValues = {
   quantity: number;
@@ -12,55 +13,6 @@ type FormValues = {
   name: string;
   comment: string;
   delivery: number;
-};
-
-export const getNextWeekdays = (targetDays: number[], countPerDay: number) => {
-  const result: Date[] = [];
-  const today = new Date();
-  const date = new Date(today);
-
-  while (result.length < targetDays.length * countPerDay) {
-    date.setDate(date.getDate() + 1);
-    if (targetDays.includes(date.getDay())) {
-      result.push(new Date(date));
-    }
-  }
-
-  return result;
-};
-
-export const formatDate = (date: Date) => {
-  const formatted = date.toLocaleDateString("sr-Latn-RS", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  });
-
-  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
-};
-
-const saveToLocalStorage = (data: OrderType) => {
-  if (typeof window !== "undefined") {
-    window.localStorage.setItem("formData", JSON.stringify(data));
-  }
-};
-
-const getFromLocalStorage = () => {
-  if (typeof window !== "undefined") {
-    const stored = window.localStorage.getItem("formData");
-    if (stored) {
-      return JSON.parse(stored);
-    }
-    return {
-      quantity: 20,
-      //   address: "Jagare",
-      //   email: "customer@example.com",
-      //   phone: "065678765",
-      //   name: "Slavisa Travar",
-      //   comment: "Prije podne",
-      //   delivery: 0,
-    };
-  }
 };
 
 const fields: {
@@ -99,17 +51,20 @@ const DisplayError = ({
 };
 
 export default function OrderForm() {
-  const deliveryDays = useMemo(() => getNextWeekdays([2, 6], 4), []);
+  const deliveryDays = useMemo(() => getDeliveryDays(4), []);
   const [open, setOpen] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
-    defaultValues: getFromLocalStorage(),
+    defaultValues: storage.get("formData", {
+      quantity: 20,
+    }),
   });
 
   const onSubmit = async (data: FormValues) => {
+    const subscriptionEmail = storage.get("subscriptionEmail", "");
     try {
       await fetch("/api/orders", {
         method: "POST",
@@ -121,22 +76,21 @@ export default function OrderForm() {
           quantity: +data.quantity,
           price: 0.5,
           address: data.address,
-          email: data.email ?? "",
+          email: subscriptionEmail ?? "",
           phone: data.phone,
           name: data.name,
-          comment: data.name ?? "",
+          comment: data.comment ?? "",
           delivery: deliveryDays[data.delivery].toISOString(),
         }),
       });
-      saveToLocalStorage({
+      storage.set("formData", {
         product: 1000,
         quantity: +data.quantity,
         price: 0.5,
         address: data.address,
-        email: data.email ?? "",
         phone: data.phone,
         name: data.name,
-        comment: data.name ?? "",
+        comment: data.comment ?? "",
         delivery: "",
       });
       setOpen(true);
@@ -172,7 +126,7 @@ export default function OrderForm() {
         <option value="">Odaberite datum za dostavu</option>
         {deliveryDays.map((date, i) => (
           <option key={date.toISOString()} value={i}>
-            {formatDate(date)}
+            {getDeliveryDisplayDate(date)}
           </option>
         ))}
       </select>

@@ -1,7 +1,10 @@
 import Form from "@/components/Form";
+import Snackbar from "@/components/Snackbar";
+import SubscriptionModal from "@/components/SubscriptionModal";
 import Instagram from "@/icons/Instagram";
 import Viber from "@/icons/Viber";
 import { Exo_2 } from "next/font/google";
+import { useState } from "react";
 
 const poppins = Exo_2({
   subsets: ["latin"],
@@ -9,6 +12,7 @@ const poppins = Exo_2({
 });
 
 export default function OrderPage() {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   return (
     <div
       className={`flex flex-col items-center justify-start w-full p-3 bg-white min-h-screen pt-6 ${poppins.className} `}
@@ -16,7 +20,8 @@ export default function OrderPage() {
       <h5
         className={`text-[16px] md:text-[20px] max-w-[1000px] text-center text-black w-full`}
       >
-        Besplatna dostava na Vašu adresu na teritoriji Banja Luke svakog utorka i subote u prijepodnevnim časovima.
+        Besplatna dostava na Vašu adresu na teritoriji Banja Luke svakog utorka
+        i subote u prijepodnevnim časovima.
       </h5>
       <h5
         className={`text-[16px] md:text-[18px] my-6 text-center font-semibold text-black w-full`}
@@ -42,6 +47,12 @@ export default function OrderPage() {
           <Viber />
         </a>
       </footer>
+      <SubscriptionModal successCallback={() => setSnackbarOpen(true)} />
+      <Snackbar
+        open={snackbarOpen}
+        message="Hvala na povjerenju, Vaš email je uspješno sačuvan!"
+        onClose={() => setSnackbarOpen(false)}
+      />
     </div>
   );
 }

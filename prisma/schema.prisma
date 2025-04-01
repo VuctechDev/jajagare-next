@@ -19,11 +19,25 @@ model orders {
   quantity  Int
   price     Float
   address   String
-  email     String
   phone     String
   name      String
   comment   String
   status    String @default("open")
   delivery  DateTime
+  createdAt DateTime @default(now())
+}
+
+model subscriptions {
+  id        String   @id @default(uuid())
+  email     String
+  createdAt DateTime @default(now())
+}
+
+model users {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  phone     String
+  email     String
   createdAt DateTime @default(now())
 }

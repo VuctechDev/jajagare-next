@@ -1,81 +1,95 @@
 import { OrderType } from "@/@types";
-import { formatDate } from "@/components/Form";
+import Navigation from "@/components/backoffice/Navigation";
+import QueryPanel from "@/components/backoffice/QueryPanel";
+import Viber from "@/icons/Viber";
 import { useEffect, useState } from "react";
 
-const getNextWeekdays = (targetDays: number[], countPerDay: number) => {
-  const result: Date[] = [];
-  const today = new Date();
-  const date = new Date(today);
-
-  while (result.length < targetDays.length * countPerDay) {
-    date.setDate(date.getDate() + 1);
-    if (targetDays.includes(date.getDay())) {
-      result.push(new Date(date));
-    }
-  }
-
-  return result;
+const updateItem = async (orderId: string) => {
+  await fetch(`/api/orders/${orderId}`, {
+    method: "PATCH",
+  });
 };
 
-// await fetch(`/api/orders/${orderId}`, {
-//   method: "PATCH"
-// });
-
-// await fetch(`/api/orders/${orderId}`, {
-//   method: "DELETE"
-// });
+const deleteItem = async (orderId: string) => {
+  await fetch(`/api/orders/${orderId}`, {
+    method: "DELETE",
+  });
+};
 
 export default function Backoffice() {
-  const [data, setData] = useState<OrderType[]>([]);
-  const [delivery, setDelivery] = useState("");
+  const [data, setData] = useState<{ data: OrderType[]; total: number }>({
+    data: [],
+    total: 0,
+  });
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const get = async () => {
-      const response = await fetch(`/api/orders?delivery=${delivery}`);
+      const response = await fetch(`/api/orders?date=${query}`);
       const data = await response.json();
-      setData(data.data);
+      setData(data);
+      setLoading(false);
     };
-    if (delivery) {
+    if (query) {
       get();
     }
-  }, [delivery]);
+  }, [query]);
 
-  const total = data.reduce((agg, value: OrderType) => agg + value.quantity, 0);
+  const onQueryUpdate = (query: string) => {
+    setLoading(true);
+    setQuery(query);
+  };
 
   return (
     <div className="">
-      <div className="flex p-3">
-        {getNextWeekdays([2, 6], 2).map((item, i) => (
-          <button
-            key={i}
-            className="ml-3 text-[14px] px-4 py-2 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-semibold shadow-md transition-all duration-300 cursor-pointer"
-            onClick={() => setDelivery(item.toISOString().slice(0, 10))}
-          >
-            {formatDate(item)}
-          </button>
-        ))}
-      </div>
-      <div>
-        {data.map((item: OrderType) => (
-          <div key={item.id} className="p-2 border-b border-dark-500">
-            {item.name}, {item.address}, {item.phone} : {item.quantity} komada
-            <button
-              className="ml-14 text-[14px] px-4 py-2 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-semibold shadow-md transition-all duration-300 cursor-pointer"
-              // onClick={() => setDelivery(item.toISOString().slice(0, 10))}
+      <Navigation />
+      <QueryPanel onQueryUpdate={onQueryUpdate} />
+      {loading ? (
+        <h2>Ucitavanje...</h2>
+      ) : (
+        <div>
+          <h2 className="p-2">
+            UKUPNO KOMADA: {data.total}, PARA: {data.total * 0.5}KM
+          </h2>
+          {data.data.map((item: OrderType) => (
+            <div
+              key={item.id}
+              className="flex h-[50px] items-center p-2 border-b border-dark-500"
             >
-              Dostavljeno
-            </button>
-            <button
-              className="ml-8 text-[14px] px-4 py-2 rounded-2xl bg-red-600 hover:bg-green-700 text-white font-semibold shadow-md transition-all duration-300 cursor-pointer"
-              // onClick={() => setDelivery(item.toISOString().slice(0, 10))}
-            >
-              Obrisi
-            </button>
-          </div>
-        ))}
-
-        <h2 className="p-2"> UKUPNO: {total}</h2>
-      </div>
+              {item.name}, {item.address}, {item.phone} : {item.quantity}{" "}
+              komada, {item.status}
+              <a
+                href={`viber://chat?number=${
+                  item.phone?.startsWith("+")
+                    ? item.phone
+                    : "+387" + item.phone?.slice(1)
+                }`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Viber />
+              </a>
+              {item.status === "open" && (
+                <>
+                  <button
+                    className="ml-14 text-[14px] px-4 py-2 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-semibold shadow-md transition-all duration-300 cursor-pointer"
+                    onClick={() => updateItem(item.id ?? "")}
+                  >
+                    Dostavljeno
+                  </button>
+                  <button
+                    className="ml-8 text-[14px] px-4 py-2 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-semibold shadow-md transition-all duration-300 cursor-pointer"
+                    onClick={() => deleteItem(item.id ?? "")}
+                  >
+                    Obrisi
+                  </button>
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
