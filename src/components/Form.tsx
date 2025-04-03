@@ -57,6 +57,7 @@ export default function OrderForm() {
   const {
     register,
     handleSubmit,
+    resetField,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     defaultValues: storage.get("formData", {
@@ -94,6 +95,7 @@ export default function OrderForm() {
         comment: data.comment ?? "",
         delivery: "",
       });
+      resetField("delivery");
       setOpen(true);
     } catch (error) {
       console.log(error);

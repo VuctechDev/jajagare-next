@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
     <footer className="w-full pb-4 flex flex-col items-center justify-center gap-x-6 bg-[#20263E] mt-20">
       <div className="w-full py-1 flex items-center justify-center gap-x-6">
         <a
-          href="https://www.instagram.com"
+          href="https://www.instagram.com/poruci_jaje"
           target="_blank"
           rel="noopener noreferrer"
         >

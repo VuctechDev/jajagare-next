@@ -19,12 +19,12 @@ export default function OrderPage() {
         Luke svakog utorka i subote u prijepodnevnim časovima.
       </h5>
       <h5
-        className={`text-[16px] md:text-[18px] my-6 text-center font-semibold text-black w-full`}
+        className={`text-[16px] md:text-[18px] my-3 md:my-6 text-center font-semibold text-black w-full`}
       >
         Cijena: 10 jaja / 5KM
       </h5>
       <Form />
-      <div className={`flex-grow`}/>
+      <div className={`flex-grow`} />
       <Footer />
       <SubscriptionModal successCallback={() => setSnackbarOpen(true)} />
       <Snackbar

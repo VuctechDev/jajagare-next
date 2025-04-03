@@ -47,7 +47,7 @@ export default function Home() {
           >
             <div className={`w-full md:w-1/2 flex flex-col mb-5 md:mb-0`}>
               <h1
-                className={`text-[34px] md:text-[56px] text-black font-bold text-center md:text-left ${ibmPlexSans}`}
+                className={`text-[31px] md:text-[56px] text-black font-bold text-center md:text-left ${ibmPlexSans}`}
               >
                 Domaća organska jaja iz slobodnog uzgoja
               </h1>
@@ -57,8 +57,8 @@ export default function Home() {
                 className={`text-[14px] md:text-[18px] text-black w-full text-center md:text-left ${openSans}`}
               >
                 Naša organska jaja dolaze sa porodične farme iz slobodnog
-                uzgoja, gde koke uživaju u prirodnom okruženju. Svako jaje je
-                pažljivo sakupljeno kako bi do vašeg stola stiglo sveže i puno
+                uzgoja, gdje koke uživaju u prirodnom okruženju. Svako jaje je
+                pažljivo sakupljeno kako bi do vašeg stola stiglo svježe i puno
                 ukusa.
               </h5>
               <p

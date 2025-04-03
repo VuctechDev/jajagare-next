@@ -21,7 +21,7 @@ export default function SubscriptionModal({
 }: {
   successCallback: () => void;
 }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const {
     register,
     handleSubmit,
