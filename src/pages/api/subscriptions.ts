@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../lib/prisma";
 import { sendNotifEmail } from "@/lib/resend";
+import { handleUser } from "@/lib/user";
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,6 +15,7 @@ export default async function handler(
 
   if (req.method === "POST") {
     const { email } = req.body;
+    await handleUser(req.body);
     const data = await prisma.subscriptions.create({
       data: {
         email,

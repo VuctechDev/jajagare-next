@@ -15,7 +15,7 @@ const Hero: React.FC = () => {
     z-0 
     top-[0px] 
     xl:-top-[100px] 
-    2xl:-top-[100px]
+    2xl:-top-[160px]
   "
         autoPlay
         muted
@@ -28,7 +28,7 @@ const Hero: React.FC = () => {
         viewBox="0 0 1440 290"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-[102vw] absolute -bottom-[5px] xl:bottom-[-2px]"
+        className="w-[103vw] absolute left-[-2px] xl:left-[-15px] bottom-[-5px] xl:bottom-[-30px]"
       >
         <g clipPath="url(#clip0_1_5)">
           <path

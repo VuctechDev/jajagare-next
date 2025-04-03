@@ -20,7 +20,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.png" sizes="32x32" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="author" content="Vuctech" />
-        <meta property="og:title" content="Domaća jaja iz slobodnog uzgoja" />
+        <meta
+          property="og:title"
+          content="Domaća jaja iz slobodnog uzgoja | Dostava, Banja
+          Luka"
+        />
         <meta
           property="og:description"
           content="Svježa domaća jaja iz slobodnog uzgoja sa besplatnom dostavom na kućnu adresu."
@@ -28,7 +32,11 @@ export default function Home() {
         <meta property="og:image" content="/cover.png" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Domaća jaja iz slobodnog uzgoja" />
+        <meta
+          name="twitter:title"
+          content="Domaća jaja iz slobodnog uzgoja | Dostava, Banja
+          Luka"
+        />
         <meta
           name="twitter:description"
           content="Poručite domaća jaja sa besplatnom dostavom."
@@ -40,7 +48,7 @@ export default function Home() {
       >
         <Hero />
         <div
-          className={`w-full flex items-start justify-center px-4 mt-4 md:mt-0 md:mb-18`}
+          className={`w-full flex items-start justify-center px-4 mt-4 md:mt-0 md:mb-18 pt-0 md:pt-4`}
         >
           <div
             className={`flex flex-col w-full max-w-[1248px] items-start justify-center md:flex-row`}

@@ -42,7 +42,10 @@ export default function SubscriptionModal({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email: data.email }),
+      body: JSON.stringify({
+        email: data.email,
+        userId: storage.get("UserId", ""),
+      }),
     });
     storage.set("subscriptionEmail", data.email);
     successCallback();

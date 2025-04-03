@@ -1,4 +1,4 @@
-import { OrderType } from "@/@types";
+import { ClientOrderType } from "@/@types";
 import Navigation from "@/components/backoffice/Navigation";
 import OrderStatus from "@/components/backoffice/Status";
 import Viber from "@/icons/Viber";
@@ -12,7 +12,7 @@ const updateItem = async (orderId: string) => {
 };
 
 export default function DeliveryPage() {
-  const [data, setData] = useState<{ data: OrderType[]; total: number }>({
+  const [data, setData] = useState<{ data: ClientOrderType[]; total: number }>({
     data: [],
     total: 0,
   });
@@ -55,22 +55,22 @@ export default function DeliveryPage() {
           <h2 className="p-2">
             UKUPNO KOMADA: {data.total}, PARA: {data.total * 0.5}KM
           </h2>
-          {data.data.map((item: OrderType) => (
+          {data.data.map((item: ClientOrderType) => (
             <div
               key={item.id}
               className="flex h-[50px] items-center p-2 border-b border-dark-500"
             >
               <div className="flex w-full justify-start items-center">
-                {item.name}, {item.address}, {item.phone} : {item.quantity}{" "}
-                komada <OrderStatus status={item.status} />
+                {item.user.name}, {item.address}, {item.user.phone} :{" "}
+                {item.quantity} komada <OrderStatus status={item.status} />
               </div>
 
               <div className="flex w-full justify-end items-center">
                 <a
                   href={`viber://chat?number=${
-                    item.phone?.startsWith("+")
-                      ? item.phone
-                      : "+387" + item.phone?.slice(1)
+                    item.user.phone?.startsWith("+")
+                      ? item.user.phone
+                      : "+387" + item.user.phone?.slice(1)
                   }`}
                   target="_blank"
                   rel="noopener noreferrer"

@@ -1,8 +1,10 @@
+import useFonts from "@/hooks/useFonts";
 import Instagram from "@/icons/Instagram";
 import Viber from "@/icons/Viber";
 import Link from "next/link";
 
 const Footer: React.FC = () => {
+  const { openSans } = useFonts();
   return (
     <footer className="w-full pb-4 flex flex-col items-center justify-center gap-x-6 bg-[#20263E] mt-20">
       <div className="w-full py-1 flex items-center justify-center gap-x-6">
@@ -24,7 +26,10 @@ const Footer: React.FC = () => {
       </div>
 
       <div className="w-full py-1 flex items-center justify-center gap-x-6">
-        <Link className="text-[14px] text-white" href="privacy-policy">
+        <Link
+          className={`text-[14px] text-white font-semibold ${openSans}`}
+          href="privacy-policy"
+        >
           Politika privatnosti
         </Link>
       </div>

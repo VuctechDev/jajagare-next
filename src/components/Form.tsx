@@ -68,7 +68,7 @@ export default function OrderForm() {
   const onSubmit = async (data: FormValues) => {
     const subscriptionEmail = storage.get("subscriptionEmail", "");
     try {
-      await fetch("/api/orders", {
+      const response = await fetch("/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,6 +85,8 @@ export default function OrderForm() {
           delivery: deliveryDays[data.delivery].toISOString(),
         }),
       });
+      const body = (await response.json()) as { userId: string };
+      storage.set("UserId", body.userId);
       storage.set("formData", {
         product: 1000,
         quantity: +data.quantity,

@@ -13,17 +13,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model users {
+  id        String   @id @default(uuid())
+  name      String
+  phone     String   @unique
+  email     String
+  orders    orders[]
+  createdAt DateTime @default(now())
+}
+
 model orders {
   id        String   @id @default(uuid())
   product   Int
   quantity  Int
   price     Float
   address   String
-  phone     String
-  name      String
   comment   String
-  status    String @default("open")
+  status    String   @default("open")
   delivery  DateTime
+  userId    String
+  user      users    @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
 }
 
@@ -33,11 +42,4 @@ model subscriptions {
   createdAt DateTime @default(now())
 }
 
-model users {
-  id        String   @id @default(uuid())
-  name      String
-  address   String
-  phone     String
-  email     String
-  createdAt DateTime @default(now())
-}
+

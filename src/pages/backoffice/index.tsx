@@ -1,4 +1,4 @@
-import { OrderType } from "@/@types";
+import { ClientOrderType } from "@/@types";
 import Navigation from "@/components/backoffice/Navigation";
 import QueryPanel from "@/components/backoffice/QueryPanel";
 import OrderStatus from "@/components/backoffice/Status";
@@ -18,7 +18,7 @@ const deleteItem = async (orderId: string) => {
 };
 
 export default function Backoffice() {
-  const [data, setData] = useState<{ data: OrderType[]; total: number }>({
+  const [data, setData] = useState<{ data: ClientOrderType[]; total: number }>({
     data: [],
     total: 0,
   });
@@ -48,29 +48,40 @@ export default function Backoffice() {
     <div className="">
       <Navigation />
       <QueryPanel onQueryUpdate={onQueryUpdate} />
+      <h2 className="p-2">
+        UKUPNO KOMADA: {data.total}, PARA: {data.total * 0.5}KM
+      </h2>
       {loading ? (
         <h2>Ucitavanje...</h2>
       ) : (
-        <div>
-          <h2 className="p-2">
-            UKUPNO KOMADA: {data.total}, PARA: {data.total * 0.5}KM
-          </h2>
-          {data.data.map((item: OrderType) => (
+        <div className="w-full min-w-[1200px] p-4 space-y-1">
+          <div className="flex font-semibold text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-xl shadow-sm">
+            <div className="w-1/7">Ime</div>
+            <div className="w-1/6">Adresa</div>
+            <div className="w-1/7">Telefon</div>
+            <div className="w-1/9">Kolicina</div>
+            <div className="w-1/7">Status</div>
+            <div className="w-1/6"></div>
+          </div>
+          {data.data.map((item) => (
             <div
               key={item.id}
-              className="flex h-[50px] items-center p-2 border-b border-dark-500"
+              className="flex items-center text-sm text-gray-800 bg-white px-4 py-2 rounded-xl shadow hover:shadow-md transition"
             >
-              <div className="flex w-full justify-start items-center">
-                {item.name}, {item.address}, {item.phone} : {item.quantity}{" "}
-                komada <OrderStatus status={item.status} />
+              <div className="w-1/7">{item.user.name}</div>
+              <div className="w-1/6">{item.address}</div>
+              <div className="w-1/7">{item.user.phone || "—"}</div>
+              <div className="w-1/9">{item.quantity ?? 0}</div>
+              <div className="w-1/7">
+                <OrderStatus status={item.status} />
               </div>
 
-              <div className="flex w-full justify-end items-center">
+              <div className="w-1/6 h-[40px] flex items-center">
                 <a
                   href={`viber://chat?number=${
-                    item.phone?.startsWith("+")
-                      ? item.phone
-                      : "+387" + item.phone?.slice(1)
+                    item.user.phone?.startsWith("+")
+                      ? item.user.phone
+                      : "+387" + item.user.phone?.slice(1)
                   }`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -80,7 +91,7 @@ export default function Backoffice() {
                 {item.status === "open" && (
                   <>
                     <button
-                      className="ml-14 text-[14px] px-4 py-2 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-semibold shadow-md transition-all duration-300 cursor-pointer"
+                      className="ml-8 text-[14px] px-4 py-2 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-semibold shadow-md transition-all duration-300 cursor-pointer"
                       onClick={() => updateItem(item.id ?? "")}
                     >
                       Dostavljeno
