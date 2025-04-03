@@ -1,14 +1,11 @@
-// import Navigation from "@/components/backoffice/Navigation";
-import { Exo_2 } from "next/font/google";
+import Button from "@/components/Button";
+import Footer from "@/components/Footer";
+import Hero from "@/components/sections/Hero";
+import useFonts from "@/hooks/useFonts";
 import Head from "next/head";
-import Link from "next/link";
-
-const poppins = Exo_2({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-});
 
 export default function Home() {
+  const { ibmPlexSans, openSans } = useFonts();
   return (
     <>
       <Head>
@@ -39,69 +36,41 @@ export default function Home() {
         <meta name="twitter:image" content="/cover.png" />
       </Head>
       <div
-        className={`relative w-full flex flex-col items-center justify-start text-black min-h-screen pb-20 gap-4 bg-white ${poppins.className} `}
+        className={`relative w-full flex flex-col items-center justify-start text-black min-h-screen gap-4 `}
       >
+        <Hero />
         <div
-          className="relative max-h-[600px] w-full h-auto bg-black"
-          style={{
-            overflow: "hidden",
-          }}
+          className={`w-full flex items-start justify-center px-4 mt-4 md:mt-0 md:mb-18`}
         >
-          <video
-            className="
-          relative 
-          w-full 
-          z-0 
-          top-[0px] 
-          xl:-top-[100px] 
-          2xl:-top-[100px]
-        "
-            autoPlay
-            muted
-            loop
-            playsInline
-            src="/chick.mp4"
-          ></video>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 1440 320"
-            className="absolute -bottom-[5px] xl:bottom-[-30px] "
+          <div
+            className={`flex flex-col w-full max-w-[1248px] items-start justify-center md:flex-row`}
           >
-            <path
-              fill="#ffffff"
-              fillOpacity="1"
-              d="M0,256L60,234.7C120,213,240,171,360,176C480,181,600,235,720,250.7C840,267,960,245,1080,224C1200,203,1320,181,1380,170.7L1440,160L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
-            ></path>
-          </svg>
+            <div className={`w-full md:w-1/2 flex flex-col mb-5 md:mb-0`}>
+              <h1
+                className={`text-[34px] md:text-[56px] text-black font-bold text-center md:text-left ${ibmPlexSans}`}
+              >
+                Domaća organska jaja iz slobodnog uzgoja
+              </h1>
+            </div>
+            <div className={`w-full md:w-1/2 flex flex-col`}>
+              <h5
+                className={`text-[14px] md:text-[18px] text-black w-full text-center md:text-left ${openSans}`}
+              >
+                Naša organska jaja dolaze sa porodične farme iz slobodnog
+                uzgoja, gde koke uživaju u prirodnom okruženju. Svako jaje je
+                pažljivo sakupljeno kako bi do vašeg stola stiglo sveže i puno
+                ukusa.
+              </h5>
+              <p
+                className={`text-[14px] md:text-[18px] font-semibold text-black w-full mt-6 mb-6 md:mb-4 text-center md:text-left ${openSans}`}
+              >
+                Besplatna dostava na kućnu adresu na teritoriji Banja Luke!
+              </p>
+              <Button fullWidthSmall href="/order" label="Poruči" />
+            </div>
+          </div>
         </div>
-        {/* <Navigation /> */}
-        <h1
-          className={`text-[26px] md:text-[50px]  text-center text-black font-semibold font-sans`}
-        >
-          Domaća organska jaja iz slobodnog uzgoja
-        </h1>
-        <h5
-          className={`text-[14px] md:text-[16px] px-3 max-w-[1000px] text-center text-black w-full`}
-        >
-          Naša organska jaja dolaze sa porodične farme iz slobodnog uzgoja, gde
-          koke uživaju u prirodnom okruženju. Svako jaje je pažljivo sakupljeno
-          kako bi do vašeg stola stiglo sveže i puno ukusa.
-        </h5>
-        <div
-          className={`w-full flex flex-col mt-4 items-center justify-center`}
-        >
-          <p
-            className={`text-[16px] md:text-[16px] px-3 font-bold text-center text-black w-full`}
-          >
-            Besplatna dostava na kućnu adresu na teritoriji Banja Luke!
-          </p>
-          <Link href="/order" className="mt-8">
-            <button className="ml-3 text-[18px] px-6 py-3 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-semibold shadow-md transition-all duration-300 cursor-pointer">
-              Poruči
-            </button>
-          </Link>
-        </div>
-        {/* <Link href="/backoffice">BO</Link> */}
+        <Footer />
       </div>
     </>
   );

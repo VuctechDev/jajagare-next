@@ -1,3 +1,4 @@
+import useFonts from "@/hooks/useFonts";
 import { useEffect, useState } from "react";
 
 type SnackbarProps = {
@@ -13,6 +14,7 @@ export default function Snackbar({
   onClose,
   duration = 6000,
 }: SnackbarProps) {
+  const { openSans } = useFonts();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -31,7 +33,7 @@ export default function Snackbar({
   return (
     <div
       className={`
-        fixed bottom-6 left-6 transform 
+        fixed bottom-6 left-4 right-4 md:left-6 md:right-auto transform ${openSans} font-semibold
         px-6 py-3 rounded-2xl shadow-lg
         bg-green-600 text-white
         transition-all duration-300

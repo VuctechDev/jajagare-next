@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import Snackbar from "./Snackbar";
 import { getDeliveryDays, getDeliveryDisplayDate } from "@/lib/date";
 import { storage } from "@/lib/storage";
+import Button from "./Button";
 
 type FormValues = {
   quantity: number;
@@ -59,7 +60,7 @@ export default function OrderForm() {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     defaultValues: storage.get("formData", {
-      quantity: 20,
+      quantity: 30,
     }),
   });
 
@@ -102,7 +103,7 @@ export default function OrderForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-2 max-w-[400px] w-full mx-auto p-4 bg-white rounded-xl shadow-lg text-black"
+      className="flex flex-col gap-2 max-w-[400px] mt-3 w-full mx-auto p-4  text-black gap-y-3"
     >
       {fields.map((item) => (
         <React.Fragment key={item.name}>
@@ -110,7 +111,7 @@ export default function OrderForm() {
             type={item.type}
             placeholder={item.label}
             {...register(item.name, { required: true })}
-            className="px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
+            className="px-4 py-3 bg-white rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#DB6D1D] shadow-md transition-all duration-200"
           />
           <DisplayError
             message={`${item.label} je obavezno polje!`}
@@ -121,7 +122,7 @@ export default function OrderForm() {
 
       <select
         {...register("delivery", { required: true })}
-        className="px-4 py-3 rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
+        className="px-4 py-3  bg-white rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#DB6D1D] shadow-md transition-all duration-200"
       >
         <option value="">Odaberite datum za dostavu</option>
         {deliveryDays.map((date, i) => (
@@ -138,54 +139,32 @@ export default function OrderForm() {
       <select
         {...register("quantity", { required: true, min: 1 })}
         defaultValue={20}
-        className="px-4 py-3 rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
+        className="px-4 py-3  bg-white rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#DB6D1D] shadow-md transition-all duration-200"
       >
-        {Array.from({ length: 15 }, (_, i) => (
-          <option value={i * 10 + 10} key={i}>
-            {i * 10 + 10} jaja / {i * 5 + 5}KM
-          </option>
-        ))}
+        {Array.from({ length: 15 }, (_, i) =>
+          i !== 0 ? (
+            <option value={i * 10 + 10} key={i}>
+              {i * 10 + 10} jaja / {i * 5 + 5}KM
+            </option>
+          ) : null
+        )}
       </select>
       <DisplayError
         message="Kolicina je obavezno polje"
-        show={!!errors.address}
+        show={!!errors.quantity}
       />
-
-      {/* <input
-        type="email"
-        placeholder="Email"
-        {...register("email", { required: true })}
-        className="px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
-      /> */}
-      {/* <DisplayError message="Valid email is required" show={!!errors.email} /> */}
-
-      {/* <input
-        type="text"
-        placeholder="Phone"
-        {...register("phone", { required: true })}
-        className="px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
-      />
-      <DisplayError message="Phone is required" show={!!errors.phone} /> */}
 
       <textarea
         placeholder="Dodatni komentar"
         {...register("comment")}
-        className="px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
+        className="px-4 py-3  bg-white mb-5 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#DB6D1D] shadow-md transition-all duration-200"
       />
-
-      <button
+      <Button
         type="submit"
-        disabled={isSubmitting}
-        className={`px-6 py-3 mt-4 rounded-2xl text-white font-semibold shadow-md transition-all duration-300 cursor-pointer
-          ${
-            isSubmitting
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-green-600 hover:bg-green-700"
-          }
-        `}
-      >
-        {isSubmitting ? "Slanje..." : "Poruči"}
-      </button>
+        fullWidth
+        label="Poruči"
+        isSubmitting={isSubmitting}
+      />
       <Snackbar
         open={open}
         message="Vaša narudžba je uspješno poslata!"
