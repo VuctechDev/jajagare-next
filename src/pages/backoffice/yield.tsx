@@ -261,7 +261,7 @@ export default function UsersPage() {
             </div>
             <div className="flex flex-col mt-8 mb-6 items-center w-full">
               <p className="mb-5">Poslednjih 30 dana</p>
-              <EggYieldChart data={data.data?.toReversed()} />
+              <EggYieldChart data={data.data?.slice().reverse()} />
             </div>
           </div>
         </div>
