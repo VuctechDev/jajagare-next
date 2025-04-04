@@ -56,3 +56,11 @@ export type OrderCreateType = {
   comment: string;
   delivery: string;
 };
+
+export type YieldType = {
+  id: number;
+  chickens: number;
+  quantity: number;
+  comment: string;
+  date: string;
+};

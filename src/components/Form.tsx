@@ -4,6 +4,8 @@ import Snackbar from "./Snackbar";
 import { getDeliveryDays, getDeliveryDisplayDate } from "@/lib/date";
 import { storage } from "@/lib/storage";
 import Button from "./Button";
+import InputField from "./form/InputField";
+import { eggPrice, orderQuantityLenght } from "@/lib/data";
 
 type FormValues = {
   quantity: number;
@@ -35,6 +37,11 @@ const fields: {
     label: "Adresa",
     name: "address",
     type: "text",
+  },
+  {
+    label: "Dodatni komentar",
+    name: "comment",
+    type: "textarea",
   },
 ];
 
@@ -76,7 +83,7 @@ export default function OrderForm() {
         body: JSON.stringify({
           product: 1000,
           quantity: +data.quantity,
-          price: 0.5,
+          price: eggPrice,
           address: data.address,
           email: subscriptionEmail ?? "",
           phone: data.phone,
@@ -90,7 +97,7 @@ export default function OrderForm() {
       storage.set("formData", {
         product: 1000,
         quantity: +data.quantity,
-        price: 0.5,
+        price: eggPrice,
         address: data.address,
         phone: data.phone,
         name: data.name,
@@ -104,26 +111,30 @@ export default function OrderForm() {
     }
   };
 
+  const displayPrice = eggPrice * 10;
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-2 max-w-[400px] mt-3 w-full mx-auto p-4  text-black gap-y-3"
     >
-      {fields.map((item) => (
-        <React.Fragment key={item.name}>
-          <input
-            type={item.type}
-            placeholder={item.label}
-            {...register(item.name, { required: true })}
-            className="px-4 py-3 bg-white rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#DB6D1D] shadow-md transition-all duration-200"
-          />
-          <DisplayError
-            message={`${item.label} je obavezno polje!`}
-            show={!!errors[item.name]}
-          />
-        </React.Fragment>
-      ))}
-
+      <select
+        {...register("quantity", { required: true, min: 1 })}
+        defaultValue={20}
+        className="px-4 py-3  bg-white rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#DB6D1D] shadow-md transition-all duration-200"
+      >
+        {Array.from({ length: orderQuantityLenght }, (_, i) =>
+          i !== 0 ? (
+            <option value={i * 10 + 10} key={i}>
+              {i * 10 + 10} jaja / {i * displayPrice + displayPrice}KM
+            </option>
+          ) : null
+        )}
+      </select>
+      <DisplayError
+        message="Kolicina je obavezno polje"
+        show={!!errors.quantity}
+      />
       <select
         {...register("delivery", { required: true })}
         className="px-4 py-3  bg-white rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#DB6D1D] shadow-md transition-all duration-200"
@@ -139,30 +150,17 @@ export default function OrderForm() {
         message="Datum Dostave je obavezno polje!"
         show={!!errors.delivery}
       />
+      {fields.map((item) => (
+        <InputField
+          key={item.name}
+          name={item.name}
+          label={item.label}
+          type={item.type}
+          register={register}
+          error={!!errors[item.name]}
+        />
+      ))}
 
-      <select
-        {...register("quantity", { required: true, min: 1 })}
-        defaultValue={20}
-        className="px-4 py-3  bg-white rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#DB6D1D] shadow-md transition-all duration-200"
-      >
-        {Array.from({ length: 15 }, (_, i) =>
-          i !== 0 ? (
-            <option value={i * 10 + 10} key={i}>
-              {i * 10 + 10} jaja / {i * 5 + 5}KM
-            </option>
-          ) : null
-        )}
-      </select>
-      <DisplayError
-        message="Kolicina je obavezno polje"
-        show={!!errors.quantity}
-      />
-
-      <textarea
-        placeholder="Dodatni komentar"
-        {...register("comment")}
-        className="px-4 py-3  bg-white mb-5 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#DB6D1D] shadow-md transition-all duration-200"
-      />
       <Button
         type="submit"
         fullWidth

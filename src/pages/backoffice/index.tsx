@@ -3,6 +3,7 @@ import Navigation from "@/components/backoffice/Navigation";
 import QueryPanel from "@/components/backoffice/QueryPanel";
 import OrderStatus from "@/components/backoffice/Status";
 import Viber from "@/icons/Viber";
+import { eggPrice } from "@/lib/data";
 import { useEffect, useState } from "react";
 
 const updateItem = async (orderId: string) => {
@@ -42,14 +43,12 @@ export default function Backoffice() {
     setQuery(query);
   };
 
-  console.log(query);
-
   return (
     <div className="">
       <Navigation />
       <QueryPanel onQueryUpdate={onQueryUpdate} />
       <h2 className="p-2">
-        UKUPNO KOMADA: {data.total}, PARA: {data.total * 0.5}KM
+        UKUPNO KOMADA: {data.total}, VRIJEDNOST: {data.total * eggPrice}KM
       </h2>
       {loading ? (
         <h2>Ucitavanje...</h2>

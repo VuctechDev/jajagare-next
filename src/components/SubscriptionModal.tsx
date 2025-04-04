@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Dialog from "./Dialog";
 import { storage } from "@/lib/storage";
 import { useForm } from "react-hook-form";
+import InputField from "./form/InputField";
 
 const handleDisplayLogic = () => {
   if (storage.get("subscriptionEmail", null)) {
@@ -67,15 +68,13 @@ export default function SubscriptionModal({
       isSubmitting={isSubmitting}
       title="Povremeno u ponudi imamo i domaću piletinu, junetinu i teletinu kao i mliječne proizvode. Ako želite da vas obavijestimo o dostupnosti ostalih naših proizvoda, ostavite nam vašu email adresu."
     >
-      <input
-        type="text"
-        placeholder="Email"
-        {...register("email", { required: true })}
-        className="w-full px-4 py-3 mt-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#DB6D1D] shadow-md transition-all duration-200"
+      <InputField
+        name="email"
+        label="Email"
+        type="email"
+        register={register}
+        error={!!errors.email}
       />
-      {errors.email && (
-        <span className="text-red-500 text-[10px]">Obavezno polje</span>
-      )}
     </Dialog>
   );
 }

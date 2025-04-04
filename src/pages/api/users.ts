@@ -30,16 +30,6 @@ export default async function handler(
         lastOrder: stats?._max.createdAt ?? null,
       };
     });
-    // const users = await prisma.users.findMany({
-    //   include: {
-    //     _count: {
-    //       select: {
-    //         orders: true,
-    //       },
-    //     },
-    //   },
-    // });
-    // const count = await prisma.users.count();
     return res.json({ data: enrichedUsers, total: users?.length ?? 0 });
   }
 

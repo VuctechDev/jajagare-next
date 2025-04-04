@@ -2,17 +2,22 @@ import Link from "next/link";
 
 const links = [
   { label: "Home", href: "/" },
+  { label: "Poruci", href: "/order" },
   { label: "BO", href: "/backoffice" },
   { label: "Dostave", href: "/delivery" },
-  { label: "Narudzbe", href: "/order" },
   { label: "Kupci", href: "/backoffice/users" },
+  { label: "Prinos", href: "/backoffice/yield" },
 ];
 
 const Navigation: React.FC = () => {
   return (
-    <div className="flex p-2 gap-4">
+    <div className="flex p-3 gap-4 overflow-auto">
       {links.map((item) => (
-        <Link key={item.label} href={item.href}>
+        <Link
+          className="font-semibold text-xl"
+          key={item.label}
+          href={item.href}
+        >
           {item.label}
         </Link>
       ))}

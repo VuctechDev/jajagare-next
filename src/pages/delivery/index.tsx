@@ -2,6 +2,7 @@ import { ClientOrderType } from "@/@types";
 import Navigation from "@/components/backoffice/Navigation";
 import OrderStatus from "@/components/backoffice/Status";
 import Viber from "@/icons/Viber";
+import { eggPrice } from "@/lib/data";
 import { getDeliveryDays, getDeliveryDisplayDate } from "@/lib/date";
 import { useEffect, useState } from "react";
 
@@ -53,7 +54,7 @@ export default function DeliveryPage() {
       ) : (
         <div>
           <h2 className="p-2">
-            UKUPNO KOMADA: {data.total}, PARA: {data.total * 0.5}KM
+            UKUPNO KOMADA: {data.total}, PARA: {data.total * eggPrice}KM
           </h2>
           {data.data.map((item: ClientOrderType) => (
             <div

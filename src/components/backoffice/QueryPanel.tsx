@@ -4,9 +4,10 @@ import { useForm } from "react-hook-form";
 
 interface Props {
   onQueryUpdate: (query: string) => void;
+  month?: boolean;
 }
 
-const QueryPanel: React.FC<Props> = ({ onQueryUpdate }) => {
+const QueryPanel: React.FC<Props> = ({ onQueryUpdate, month }) => {
   const [daysInMonth, setDaysInMonth] = useState(31);
   const { register, watch } = useForm({
     defaultValues: {
@@ -32,17 +33,19 @@ const QueryPanel: React.FC<Props> = ({ onQueryUpdate }) => {
 
   return (
     <div className="flex p-3 gap-4">
-      <select
-        {...register("day", { required: true })}
-        className="w-[150px] px-4 py-3 rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
-      >
-        <option value={""}>Citav Mjesec</option>
-        {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => (
-          <option key={day} value={day}>
-            {day}
-          </option>
-        ))}
-      </select>
+      {!month && (
+        <select
+          {...register("day", { required: true })}
+          className="w-[150px] px-4 py-3 rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
+        >
+          <option value={""}>Citav Mjesec</option>
+          {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => (
+            <option key={day} value={day}>
+              {day}
+            </option>
+          ))}
+        </select>
+      )}
       <select
         {...register("month", { required: true })}
         className="w-[150px] px-4 py-3 rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"

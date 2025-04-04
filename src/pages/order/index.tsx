@@ -3,6 +3,7 @@ import Form from "@/components/Form";
 import Snackbar from "@/components/Snackbar";
 import SubscriptionModal from "@/components/SubscriptionModal";
 import useFonts from "@/hooks/useFonts";
+import { eggPrice } from "@/lib/data";
 import Head from "next/head";
 import { useState } from "react";
 
@@ -58,7 +59,7 @@ export default function OrderPage() {
         <h5
           className={`text-[16px] md:text-[18px] my-3 md:my-6 text-center font-semibold text-black w-full`}
         >
-          Cijena: 10 jaja / 5KM
+          Cijena: 10 jaja / {10 * eggPrice}KM
         </h5>
         <Form />
         <div className={`flex-grow`} />

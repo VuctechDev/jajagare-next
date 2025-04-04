@@ -8,11 +8,17 @@ export default async function handler(
 ) {
   if (req.method === "GET") {
     const { date } = req.query;
+    if (!date) {
+      const orders = await prisma.orders.findMany({
+        include: { user: true },
+      });
+      return res.json({ data: orders, total: 0 });
+    }
     const orders = await prisma.orders.findMany({
       where: {
         delivery: getDateRange(date as string),
-        // status: "open",
       },
+      include: { user: true },
     });
     const total = await prisma.orders.aggregate({
       _sum: {
@@ -20,7 +26,6 @@ export default async function handler(
       },
       where: {
         delivery: getDateRange(date as string),
-        // status: "open",
       },
     });
     return res.json({ data: orders, total: total._sum.quantity ?? 0 });

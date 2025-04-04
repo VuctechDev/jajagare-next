@@ -25,7 +25,14 @@ const getNextWeekdays = (targetDays: number[], countPerDay: number) => {
   return result;
 };
 
-export const getDeliveryDisplayDate = (date: Date) => {
+export const getDeliveryDisplayDate = (date: Date, excludeDay?: boolean) => {
+  if (excludeDay) {
+    const formatted = date.toLocaleDateString("sr-Latn-RS", {
+      month: "long",
+      day: "numeric",
+    });
+    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+  }
   const formatted = date.toLocaleDateString("sr-Latn-RS", {
     weekday: "long",
     month: "long",

@@ -42,4 +42,13 @@ model subscriptions {
   createdAt DateTime @default(now())
 }
 
+model eggs_yield {
+  id        Int      @id @default(autoincrement())
+  chickens  Int
+  quantity  Int
+  comment   String?
+  date      DateTime @unique
+
+}
+
 
