@@ -1,17 +1,31 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../lib/prisma";
 import { YieldType } from "@/@types";
+import { getDateRange } from "@/lib/date";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
+    const { date } = req.query;
+    if (!date) {
+      const data = await prisma.eggs_yield.findMany({
+        orderBy: {
+          date: "desc",
+        },
+        take: 30,
+      });
+      const total = data.reduce((sum, entry) => sum + entry.quantity, 0);
+      return res.json({ data, total: total });
+    }
     const data = await prisma.eggs_yield.findMany({
+      where: {
+        date: getDateRange(date as string),
+      },
       orderBy: {
         date: "desc",
       },
-      take: 30,
     });
     const total = data.reduce((sum, entry) => sum + entry.quantity, 0);
     const [topDay] = await prisma.$queryRawUnsafe<YieldType[]>(`

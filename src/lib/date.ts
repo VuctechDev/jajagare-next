@@ -60,9 +60,14 @@ export const getLastDayInMonth = (month: number, year: number): number => {
 };
 
 export const getDateRange = (date: string) => {
-  if (date?.endsWith("00")) {
-    const [year, month] = date.split("-");
-    console.log(year, month);
+  const [year, month, day] = date.split("-");
+
+  if (day !== "00") {
+    return {
+      gte: new Date(`${date}T00:00:00.000Z`),
+      lt: new Date(`${date}T23:59:59.999Z`),
+    };
+  } else if (month !== "00") {
     return {
       gte: new Date(`${year}-${month}-01T00:00:00.000Z`),
       lt: new Date(
@@ -71,7 +76,7 @@ export const getDateRange = (date: string) => {
     };
   }
   return {
-    gte: new Date(`${date}T00:00:00.000Z`),
-    lt: new Date(`${date}T23:59:59.999Z`),
+    gte: new Date(`${year}-01-01T00:00:00.000Z`),
+    lt: new Date(`${year}-12-31T23:59:59.999Z`),
   };
 };

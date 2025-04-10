@@ -1,4 +1,5 @@
 import { YieldType } from "@/@types";
+import QueryPanel from "@/components/backoffice/QueryPanel";
 import Button from "@/components/Button";
 import InputField from "@/components/form/InputField";
 import Snackbar from "@/components/Snackbar";
@@ -133,7 +134,8 @@ const fields: {
 export default function UsersPage() {
   const { openSans } = useFonts();
   const [open, setOpen] = useState(false);
-  const { data, isLoading } = useGetYield();
+  const [query, setQuery] = useState("");
+  const { data, isLoading } = useGetYield(query);
   const { mutateAsync: createYield } = useCreateYield();
 
   const {
@@ -156,6 +158,10 @@ export default function UsersPage() {
     }
   };
 
+  const onQueryUpdate = (query: string) => {
+    setQuery(query);
+  };
+
   const totalChickens = data.data.reduce(
     (sum, entry) => sum + entry.chickens,
     0
@@ -163,7 +169,7 @@ export default function UsersPage() {
   const averageYield = ((data.total * 100) / totalChickens).toFixed(1);
   return (
     <div className={`w-full ${openSans}`}>
-      {/* <QueryPanel onQueryUpdate={(value) => console.log(value)} month /> */}
+      <QueryPanel onQueryUpdate={onQueryUpdate} month />
       {isLoading ? (
         <h2>Ucitavanje...</h2>
       ) : (
@@ -251,7 +257,7 @@ export default function UsersPage() {
               </div>
             </div>
             <div className="flex flex-col mt-8 mb-6 items-center w-full">
-              <p className="mb-5">Poslednjih 30 dana</p>
+              {/* <p className="mb-5">Poslednjih 30 dana</p> */}
               <EggYieldChart data={data.data?.slice().reverse()} />
             </div>
           </div>

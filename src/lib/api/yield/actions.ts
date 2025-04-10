@@ -3,12 +3,14 @@ import { apiClient } from "..";
 
 const path = "/yield";
 
-const get = async (): Promise<{
+const get = async (
+  query: string
+): Promise<{
   data: YieldType[];
   total: number;
   topDay: YieldType | null;
 }> => {
-  const response = await apiClient.get(`${path}`);
+  const response = await apiClient.get(`${path}${query}`);
   return response.data;
 };
 

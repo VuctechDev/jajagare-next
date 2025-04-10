@@ -1,6 +1,7 @@
 import { getLastDayInMonth } from "@/lib/date";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import Button from "../Button";
 
 interface Props {
   onQueryUpdate: (query: string) => void;
@@ -9,10 +10,10 @@ interface Props {
 
 const QueryPanel: React.FC<Props> = ({ onQueryUpdate, month }) => {
   const [daysInMonth, setDaysInMonth] = useState(31);
-  const { register, watch } = useForm({
+  const { register, watch, setValue } = useForm({
     defaultValues: {
-      year: new Date().getFullYear(),
-      month: new Date().getMonth(),
+      year: +new Date().getFullYear(),
+      month: +new Date().getMonth(),
       day: "",
     },
   });
@@ -26,62 +27,97 @@ const QueryPanel: React.FC<Props> = ({ onQueryUpdate, month }) => {
   }, [selectedYear, selectedMonth]);
 
   useEffect(() => {
-    const formattedMonth = String(Number(selectedMonth) + 1).padStart(2, "0");
+    setValue("day", "");
+  }, [selectedMonth]);
+
+  useEffect(() => {
+    const formattedMonth = selectedMonth
+      ? String(Number(selectedMonth) + 1).padStart(2, "0")
+      : "00";
     const formattedDay = String(selectedDay).padStart(2, "0");
-    onQueryUpdate(`${selectedYear}-${formattedMonth}-${formattedDay}`);
-  }, [selectedYear, selectedMonth, selectedDay, onQueryUpdate]);
+    onQueryUpdate(`?date=${selectedYear}-${formattedMonth}-${formattedDay}`);
+  }, [selectedYear, selectedMonth, selectedDay]);
+
+  const handleLast30Days = (days: string) => {
+    onQueryUpdate(`?lastDays=${days}`);
+  };
 
   return (
-    <div className="flex p-3 gap-4">
-      {!month && (
+    <div className="flex flex-col md:flex-row py-3 px-0 md:px-3 gap-4">
+      <div className="flex items-center gap-4">
+        {!month && (
+          <select
+            disabled={!selectedMonth}
+            {...register("day", { required: true })}
+            className="w-[110px] md:w-[150px] h-[40px] px-4 py-0 rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
+          >
+            <option value={""}>Citav Mjesec</option>
+            {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => (
+              <option key={day} value={day}>
+                {day}
+              </option>
+            ))}
+          </select>
+        )}
         <select
-          {...register("day", { required: true })}
-          className="w-[150px] px-4 py-3 rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
+          {...register("month", { required: true })}
+          className="w-[110px] md:w-[150px] h-[40px] px-4 py-0 rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
         >
-          <option value={""}>Citav Mjesec</option>
-          {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => (
-            <option key={day} value={day}>
-              {day}
+          <option value={""}>Citava Godina</option>
+          {[
+            "Januar",
+            "Februar",
+            "Mart",
+            "April",
+            "Maj",
+            "Jun",
+            "Jul",
+            "Avgust",
+            "Septembar",
+            "Oktobar",
+            "Novembar",
+            "Decembar",
+          ].map((month, index) => (
+            <option value={index} key={index}>
+              {month}
             </option>
           ))}
         </select>
-      )}
-      <select
-        {...register("month", { required: true })}
-        className="w-[150px] px-4 py-3 rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
-      >
-        {[
-          "Januar",
-          "Februar",
-          "Mart",
-          "April",
-          "Maj",
-          "Jun",
-          "Jul",
-          "Avgust",
-          "Septembar",
-          "Oktobar",
-          "Novembar",
-          "Decembar",
-        ].map((month, index) => (
-          <option value={index} key={index}>
-            {month}
-          </option>
-        ))}
-      </select>
-      <select
-        {...register("year", { required: true })}
-        className="w-[150px] px-4 py-3 rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
-      >
-        {Array.from({ length: 10 }, (_, i) => {
-          const year = new Date().getFullYear() - i;
-          return (
-            <option value={year} key={year}>
-              {year}
-            </option>
-          );
-        })}
-      </select>
+        <select
+          {...register("year", { required: true })}
+          className="w-[110px] md:w-[150px] h-[40px] px-4 py-0 rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
+        >
+          {Array.from({ length: 10 }, (_, i) => {
+            const year = new Date().getFullYear() - i;
+            return (
+              <option value={year} key={year}>
+                {year}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+
+      <div className="flex items-center ml-4 gap-2 md:gap-4">
+        <Button
+          label="30 dana"
+          small
+          variant="secondary"
+          onClick={() => handleLast30Days("30")}
+        />
+        <Button
+          label="60 dana"
+          small
+          variant="secondary"
+          onClick={() => handleLast30Days("60")}
+        />
+        <Button
+          label="90 dana"
+          small
+          variant="secondary"
+          onClick={() => handleLast30Days("90")}
+        />
+      </div>
     </div>
   );
 };

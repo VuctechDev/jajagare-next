@@ -2,10 +2,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import actions from "./actions";
 import { storage } from "@/lib/storage";
 
-export const useGetYield = () => {
+export const useGetYield = (query: string) => {
   return useQuery({
-    queryKey: ["yield"],
-    queryFn: () => actions.get(),
+    queryKey: ["yield", query],
+    queryFn: () => actions.get(query),
     initialData: { data: [], total: 0, topDay: null },
   });
 };

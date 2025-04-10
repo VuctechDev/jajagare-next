@@ -9,7 +9,7 @@ const get = async (
   data: ClientOrderType[];
   total: number;
 }> => {
-  const response = await apiClient.get(`${path}?date=${query}`);
+  const response = await apiClient.get(`${path}${query}`);
   return response.data;
 };
 

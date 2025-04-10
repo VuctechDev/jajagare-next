@@ -41,7 +41,7 @@ const Button: React.FC<ButtonProps> = ({
       : "min-w-[120px] max-w-[180px]";
   const variantClass = variantClasses[variant];
   const sizeClass = small
-    ? "py-0"
+    ? "!py-0 !px-0 h-[40px] !min-w-[100px] !md:min-w-[130px]"
     : "py-3 text-[18px] leading-[27px] tracking-[9%]";
 
   const base = (
