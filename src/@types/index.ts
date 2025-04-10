@@ -64,3 +64,5 @@ export type YieldType = {
   comment: string;
   date: string;
 };
+
+export type StatsType = { reserved: number; balance: number; sold: number };

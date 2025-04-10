@@ -14,7 +14,7 @@ type FormValues = {
   price: number;
   userId: string;
   comment: string;
-  delivery: string;
+  delivery: number;
 };
 
 const fields: {
@@ -42,14 +42,21 @@ export default function OrderFormBO() {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
-    defaultValues: storage.get("formData", {
-      quantity: 30,
-    }),
+    defaultValues: {
+      quantity: 50,
+    },
   });
 
   const onSubmit = async (data: FormValues) => {
     try {
-      await createOrder({ ...data, price: eggPrice, product: 1000 });
+      await createOrder({
+        ...data,
+        price: eggPrice,
+        product: 1000,
+        delivery: data.delivery
+          ? deliveryDays[data.delivery].toISOString()
+          : undefined,
+      });
       setOpen(true);
     } catch (error) {
       console.log(error);
@@ -61,7 +68,7 @@ export default function OrderFormBO() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex w-full flex-col gap-2 max-w-[400px] mt-3 w-full mx-auto p-4  text-black gap-y-3"
+      className="flex w-full flex-col gap-2 max-w-[400px] mt-3 text-black gap-y-3"
     >
       <AutocompleteInput
         label="Ime korisnika"
@@ -73,7 +80,7 @@ export default function OrderFormBO() {
         defaultValue={20}
         className="px-4 py-3  bg-white rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#DB6D1D] shadow-md transition-all duration-200"
       >
-        {Array.from({ length: orderQuantityLenght }, (_, i) =>
+        {Array.from({ length: 25 }, (_, i) =>
           i !== 0 ? (
             <option value={i * 10 + 10} key={i}>
               {i * 10 + 10} jaja / {i * displayPrice + displayPrice}KM

@@ -23,7 +23,7 @@ const create = async (
 };
 
 const createBO = async (
-  data: Partial<ClientOrderType>
+  data: Partial<OrderType>
 ): Promise<{
   data: OrderType;
 }> => {

@@ -6,8 +6,8 @@ const links = [
   { label: "BO", href: "/backoffice" },
   { label: "Prinos", href: "/backoffice/yield" },
   { label: "Narudzbe", href: "/backoffice/orders" },
-  { label: "Dostave", href: "/delivery" },
   { label: "Kupci", href: "/backoffice/users" },
+  { label: "Dostave", href: "/delivery" },
 ];
 
 const Navigation: React.FC = () => {
