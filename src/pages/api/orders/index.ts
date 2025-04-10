@@ -13,6 +13,9 @@ export default async function handler(
     if (!date) {
       const orders = await prisma.orders.findMany({
         include: { user: true },
+        orderBy: {
+          createdAt: "desc",
+        },
       });
       return res.json({ data: orders, total: 0 });
     }
@@ -21,6 +24,9 @@ export default async function handler(
         createdAt: getDateRange(date as string),
       },
       include: { user: true },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
     const total = await prisma.orders.aggregate({
       _sum: {

@@ -1,13 +1,13 @@
 import { YieldType } from "@/@types";
-import Navigation from "@/components/backoffice/Navigation";
 import Button from "@/components/Button";
 import InputField from "@/components/form/InputField";
 import Snackbar from "@/components/Snackbar";
 import useFonts from "@/hooks/useFonts";
+import { useGetYield, useCreateYield } from "@/lib/api/yield/queries";
 import { eggPrice } from "@/lib/data";
 import { getDeliveryDisplayDate } from "@/lib/date";
 import { storage } from "@/lib/storage";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   LineChart,
@@ -132,43 +132,24 @@ const fields: {
 
 export default function UsersPage() {
   const { openSans } = useFonts();
-  const [data, setData] = useState<{ data: YieldType[]; total: number }>({
-    data: [],
-    total: 0,
-  });
-  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const { data, isLoading } = useGetYield();
+  const { mutateAsync: createYield } = useCreateYield();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
-    defaultValues: storage.get("YieldFormData", {}),
+    defaultValues: {
+      ...storage.get("YieldFormData", {}),
+      date: new Date().toISOString().split("T")[0],
+    },
   });
-
-  useEffect(() => {
-    const get = async () => {
-      setLoading(true);
-      const response = await fetch(`/api/yield`);
-      const data = await response.json();
-      setLoading(false);
-      setData(data);
-    };
-
-    get();
-  }, [setLoading]);
 
   const onSubmit = async (data: FormValues) => {
     try {
-      await fetch("/api/yield", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      storage.set("YieldFormData", { ...data, date: "" });
+      await createYield(data);
       setOpen(true);
     } catch (error) {
       console.log(error);
@@ -179,13 +160,11 @@ export default function UsersPage() {
     (sum, entry) => sum + entry.chickens,
     0
   );
-
   const averageYield = ((data.total * 100) / totalChickens).toFixed(1);
   return (
     <div className={`w-full ${openSans}`}>
-      <Navigation />
       {/* <QueryPanel onQueryUpdate={(value) => console.log(value)} month /> */}
-      {loading ? (
+      {isLoading ? (
         <h2>Ucitavanje...</h2>
       ) : (
         <div className="w-full md:min-w-[1200px] p-4 space-y-1 flex flex-col-reverse md:flex-row">
@@ -200,7 +179,7 @@ export default function UsersPage() {
                 className="flex items-center text-sm text-gray-800 bg-white px-4 py-2 rounded-xl shadow hover:shadow-md transition"
               >
                 <div className="w-2/3">
-                  {getDeliveryDisplayDate(new Date(item.date), true)}
+                  {getDeliveryDisplayDate(item.date, true)}
                 </div>
                 <div className="w-1/3">{item.quantity}</div>
               </div>
@@ -244,6 +223,18 @@ export default function UsersPage() {
                   {(data.total / data.data?.length).toFixed(1)} komada
                 </p>
                 <p>Ukupna vrijednost: {data.total * eggPrice}KM</p>
+                {data.topDay && (
+                  <p>
+                    Top dan:{" "}
+                    {getDeliveryDisplayDate(data?.topDay?.date ?? "", true)},{" "}
+                    {data?.topDay?.quantity} komada,{" "}
+                    {(
+                      (data?.topDay?.quantity * 100) /
+                      data?.topDay.chickens
+                    ).toFixed(1)}
+                    %
+                  </p>
+                )}
               </div>
               <div className="w-full md:w-2/5 md:pl-8">
                 <p className="text-sm">

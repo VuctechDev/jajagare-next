@@ -51,7 +51,7 @@ const InputField = <T extends FieldValues>({
       <input
         type={type}
         placeholder={label}
-        {...register(name, { required: true })}
+        {...register(name, { required: type !== "email" ? true : false })}
         className="px-4 py-3 bg-white rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#DB6D1D] shadow-md transition-all duration-200 w-full"
       />
       {error && (

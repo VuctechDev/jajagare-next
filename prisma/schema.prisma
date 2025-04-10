@@ -30,7 +30,7 @@ model orders {
   address   String
   comment   String
   status    String   @default("open")
-  delivery  DateTime
+  delivery  DateTime?
   userId    String
   user      users    @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
@@ -48,7 +48,6 @@ model eggs_yield {
   quantity  Int
   comment   String?
   date      DateTime @unique
-
 }
 
 

@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../lib/prisma";
+import { YieldType } from "@/@types";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,8 +14,15 @@ export default async function handler(
       take: 30,
     });
     const total = data.reduce((sum, entry) => sum + entry.quantity, 0);
+    const [topDay] = await prisma.$queryRawUnsafe<YieldType[]>(`
+      SELECT *, (quantity::float / chickens) as yield
+      FROM "eggs_yield"
+      WHERE chickens > 0
+      ORDER BY yield DESC
+      LIMIT 1;
+    `);
 
-    return res.json({ data, total });
+    return res.json({ data, total, topDay });
   }
 
   if (req.method === "POST") {
@@ -33,7 +41,7 @@ export default async function handler(
         date: new Date(date),
       },
     });
-    return res.status(201).json(data);
+    return res.status(201).json({ data });
   }
 
   res.setHeader("Allow", ["GET", "POST"]);

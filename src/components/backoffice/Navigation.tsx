@@ -2,11 +2,12 @@ import Link from "next/link";
 
 const links = [
   { label: "Home", href: "/" },
-  { label: "Poruci", href: "/order" },
+  // { label: "Poruci", href: "/order" },
   { label: "BO", href: "/backoffice" },
+  { label: "Prinos", href: "/backoffice/yield" },
+  { label: "Narudzbe", href: "/backoffice/orders" },
   { label: "Dostave", href: "/delivery" },
   { label: "Kupci", href: "/backoffice/users" },
-  { label: "Prinos", href: "/backoffice/yield" },
 ];
 
 const Navigation: React.FC = () => {

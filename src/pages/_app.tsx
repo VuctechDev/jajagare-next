@@ -1,10 +1,15 @@
 import type { AppProps } from "next/app";
 import "@/styles/globals.css";
 import Script from "next/script";
-
-const GA_MEASUREMENT_ID = "G-L5F82RE3CY";
+import { useRouter } from "next/router";
+import { GA_MEASUREMENT_ID } from "@/lib/data";
+import Navigation from "@/components/backoffice/Navigation";
+import QueryProvider from "@/components/QueryProvider";
+// import AuthWrapper from "@/components/backoffice/AuthWrapper";
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  const isBackoffice = router.pathname.startsWith("/backoffice");
   return (
     <>
       <Script
@@ -19,7 +24,18 @@ export default function App({ Component, pageProps }: AppProps) {
           gtag('config', '${GA_MEASUREMENT_ID}');
         `}
       </Script>
-      <Component {...pageProps} />
+      <QueryProvider>
+        {isBackoffice ? (
+          <>
+            <Navigation />
+            {/* <AuthWrapper> */}
+            <Component {...pageProps} />
+            {/* </AuthWrapper> */}
+          </>
+        ) : (
+          <Component {...pageProps} />
+        )}
+      </QueryProvider>
     </>
   );
 }

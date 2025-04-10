@@ -50,11 +50,18 @@ export default function OrderPage() {
       <div
         className={`flex flex-col items-center justify-start w-full pt-3 min-h-screen pt-6 ${openSans} `}
       >
-        <h5
+        {/* <h5
           className={`text-[16px] md:text-[20px] max-w-[700px] px-5 text-center text-black w-full`}
         >
           <strong>Besplatna dostava</strong> na Vašu adresu na teritoriji Banja
           Luke svakog utorka i subote u prijepodnevnim časovima.
+        </h5> */}
+
+        <h5
+          className={`text-[16px] md:text-[20px] max-w-[700px] px-5 text-center text-black w-full`}
+        >
+          Po dogovoru, nudimo<strong>Besplatnu dostavu</strong> na teritoriji
+          Banja Luke! 
         </h5>
         <h5
           className={`text-[16px] md:text-[18px] my-3 md:my-6 text-center font-semibold text-black w-full`}

@@ -25,7 +25,16 @@ const getNextWeekdays = (targetDays: number[], countPerDay: number) => {
   return result;
 };
 
-export const getDeliveryDisplayDate = (date: Date, excludeDay?: boolean) => {
+export const getDeliveryDisplayDate = (
+  date: Date | string,
+  excludeDay?: boolean
+) => {
+  if (!date) {
+    return "-";
+  }
+  if (typeof date === "string") {
+    date = new Date(date);
+  }
   if (excludeDay) {
     const formatted = date.toLocaleDateString("sr-Latn-RS", {
       month: "long",
@@ -42,7 +51,8 @@ export const getDeliveryDisplayDate = (date: Date, excludeDay?: boolean) => {
   return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 };
 
-export const getDeliveryDays = (count = 2) => getNextWeekdays([2, 6], count);
+export const getDeliveryDays = (count = 2, includeDays = [2, 6]) =>
+  getNextWeekdays(includeDays, count);
 
 export const getLastDayInMonth = (month: number, year: number): number => {
   const monthNumber = Number(month) || 0;
