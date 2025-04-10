@@ -1,7 +1,6 @@
+import { soldEggsCount } from "@/lib/data";
 import prisma from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
-
-const count = 836; // razlika presjeka stanja 8.4. 798 komada i prinosa od kad se prati
 
 export default async function handler(
   req: NextApiRequest,
@@ -33,7 +32,7 @@ export default async function handler(
 
     return res.status(201).json({
       reserved: reserved._sum.quantity,
-      balance: balance._sum.quantity! - count,
+      balance: balance._sum.quantity! - soldEggsCount,
       sold: sold._sum.quantity,
     });
   }
