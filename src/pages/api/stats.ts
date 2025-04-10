@@ -32,7 +32,7 @@ export default async function handler(
 
     return res.status(201).json({
       reserved: reserved._sum.quantity,
-      balance: balance._sum.quantity! - soldEggsCount,
+      balance: balance._sum.quantity! - soldEggsCount - sold._sum.quantity!,
       sold: sold._sum.quantity,
     });
   }

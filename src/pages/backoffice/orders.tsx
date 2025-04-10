@@ -84,6 +84,7 @@ export default function OrdersPage() {
                       Dostavljeno
                     </button>
                   )}
+                  <div className="flex-grow" />
                   <button
                     className="ml-8 text-[14px] px-4 py-2 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-semibold shadow-md transition-all duration-300 cursor-pointer"
                     onClick={() => deleteItem(item.id ?? "")}
