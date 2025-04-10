@@ -2,10 +2,9 @@ import React, { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import Snackbar from "./Snackbar";
 import { getDeliveryDays, getDeliveryDisplayDate } from "@/lib/date";
-import { storage } from "@/lib/storage";
 import Button from "./Button";
 import InputField from "./form/InputField";
-import { eggPrice, orderQuantityLenght } from "@/lib/data";
+import { eggPrice } from "@/lib/data";
 import AutocompleteInput from "./form/Autocomplete";
 import { useCreateOrderBO } from "@/lib/api/orders/queries";
 
