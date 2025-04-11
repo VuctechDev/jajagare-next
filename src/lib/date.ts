@@ -1,6 +1,10 @@
-const getNextWeekdays = (targetDays: number[], countPerDay: number) => {
+const getNextWeekdays = (
+  targetDays: number[],
+  countPerDay: number,
+  start?: string
+) => {
   const result: Date[] = [];
-  const today = new Date();
+  const today = new Date(start ?? "");
   const date = new Date(today);
 
   while (result.length < targetDays.length * countPerDay) {
@@ -51,8 +55,11 @@ export const getDeliveryDisplayDate = (
   return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 };
 
-export const getDeliveryDays = (count = 2, includeDays = [2, 6]) =>
-  getNextWeekdays(includeDays, count);
+export const getDeliveryDays = (
+  count = 2,
+  includeDays = [2, 6],
+  start?: string
+) => getNextWeekdays(includeDays, count, start);
 
 export const getLastDayInMonth = (month: number, year: number): number => {
   const monthNumber = Number(month) || 0;

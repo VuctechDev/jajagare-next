@@ -28,7 +28,7 @@ const QueryPanel: React.FC<Props> = ({ onQueryUpdate, month }) => {
 
   useEffect(() => {
     setValue("day", "");
-  }, [selectedMonth]);
+  }, [selectedMonth, setValue]);
 
   useEffect(() => {
     const formattedMonth = selectedMonth
@@ -36,6 +36,7 @@ const QueryPanel: React.FC<Props> = ({ onQueryUpdate, month }) => {
       : "00";
     const formattedDay = String(selectedDay).padStart(2, "0");
     onQueryUpdate(`?date=${selectedYear}-${formattedMonth}-${formattedDay}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedYear, selectedMonth, selectedDay]);
 
   const handleLast30Days = (days: string) => {
@@ -43,8 +44,8 @@ const QueryPanel: React.FC<Props> = ({ onQueryUpdate, month }) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row py-3 px-0 md:px-3 gap-4">
-      <div className="flex items-center gap-4">
+    <div className="flex flex-col md:flex-row py-3 px-0 md:px-3 gap-4 mt-2">
+      <div className="flex items-center px-2 gap-4">
         {!month && (
           <select
             disabled={!selectedMonth}
@@ -98,7 +99,7 @@ const QueryPanel: React.FC<Props> = ({ onQueryUpdate, month }) => {
         </select>
       </div>
 
-      <div className="flex items-center ml-4 gap-2 md:gap-4">
+      <div className="flex items-center px-2 md:ml-4 gap-2 md:gap-4">
         <Button
           label="30 dana"
           small

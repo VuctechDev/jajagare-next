@@ -60,13 +60,24 @@ export default function OrderPage() {
         <h5
           className={`text-[16px] md:text-[20px] max-w-[700px] px-5 text-center text-black w-full`}
         >
-          Po dogovoru, nudimo<strong>Besplatnu dostavu</strong> na teritoriji
-          Banja Luke! 
+          <strong>Besplatna dostava</strong> po dogovoru, na teritoriji Banja
+          Luke!
         </h5>
+        {/* <h5
+          className={`text-[16px] md:text-[20px] max-w-[700px] px-5 text-center text-black w-full`}
+        >
+          Jaja takodje mozete da preuzmete direkno na nasoj farmi <strong>LOKACIJA</strong>.
+        </h5> */}
         <h5
-          className={`text-[16px] md:text-[18px] my-3 md:my-6 text-center font-semibold text-black w-full`}
+          className={`text-[16px] md:text-[18px] my-2 md:my-6 text-center font-semibold text-black w-full`}
         >
           Cijena: 10 jaja / {10 * eggPrice}KM
+        </h5>
+        <h5
+          className={`text-[16px] md:text-[18px] my-2 md:my-3 text-center font-semibold text-black w-full`}
+        >
+          Zbog velikog broja narudžbi povodom Vaskrsa, poručivanje je moguće od
+          utorka, 22. aprila.{" "}
         </h5>
         <Form />
         <div className={`flex-grow`} />

@@ -1,6 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 
+// const getStatus = (userId: string, delivery: string) => {
+//   if (userId === "b8380558-b8ce-48f1-862c-6d155f63bcd6") {
+//     return "writeOff";
+//   }
+//   if (delivery) {
+//     return "open";
+//   }
+//   return "done";
+// };
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -18,9 +28,6 @@ export default async function handler(
         delivery: delivery ? new Date(delivery) : null,
         status: delivery ? "open" : "done",
         userId,
-        // user: {
-        //   connect: { id: userId },
-        // },
       },
     });
     return res.status(201).json({ data });

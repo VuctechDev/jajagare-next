@@ -71,7 +71,7 @@ export default function SubscriptionModal({
       <InputField
         name="email"
         label="Email"
-        type="email"
+        type="text"
         register={register}
         error={!!errors.email}
       />
