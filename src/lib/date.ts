@@ -4,7 +4,7 @@ const getNextWeekdays = (
   start?: string
 ) => {
   const result: Date[] = [];
-  const today = new Date(start ?? "");
+  const today = start ? new Date(start) : new Date();
   const date = new Date(today);
 
   while (result.length < targetDays.length * countPerDay) {
