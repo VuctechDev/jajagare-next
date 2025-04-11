@@ -119,7 +119,7 @@ export default function OrderForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-2 max-w-[400px] mt-3 w-full mx-auto p-4  text-black gap-y-3"
+      className="flex flex-col gap-2 max-w-[400px] mt-3 w-full mx-auto px-5 text-black gap-y-3"
     >
       <select
         {...register("quantity", { required: true, min: 1 })}

@@ -30,19 +30,19 @@ export default function OrdersPage() {
   return (
     <div>
       <QueryPanel onQueryUpdate={onQueryUpdate} />
-      <div className="flex justify-start w-full md:w-1/5 p-3 my-4">
-        <OrderFormBO />
-      </div>
       <h2 className="p-2">
         UKUPNO KOMADA: {data.total}, VRIJEDNOST: {data.total * eggPrice}KM
       </h2>
+      <div className="flex flex-col md:flex-row w-full p-2 space-y-1">
+        <div className="flex justify-start w-full md:w-1/5 p-3 my-4">
+          <OrderFormBO />
+        </div>
 
-      {isLoading ? (
-        <h2>Ucitavanje...</h2>
-      ) : (
-        <div className="flex flex-col md:flex-row w-full p-2 space-y-1">
-          <div className="w-full overflow-x-auto ">
-            <div className="w-full min-w-[1100px] md:w-4/5 p-3 space-y-1">
+        <div className="w-full overflow-x-auto md:w-4/5">
+          {isLoading ? (
+            <h2>Ucitavanje...</h2>
+          ) : (
+            <div className="w-full min-w-[1100px] p-3 space-y-1">
               <div className="flex font-semibold text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-xl shadow-sm">
                 <div className="w-1/7">Ime</div>
                 <div className="w-1/6">Adresa</div>
@@ -97,9 +97,9 @@ export default function OrdersPage() {
                 </div>
               ))}
             </div>
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
