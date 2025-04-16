@@ -40,3 +40,35 @@ export const useCreateOrderBO = () => {
     },
   });
 };
+
+export const useUpdateOrderStatus = () => {
+  const queryClient = useQueryClient();
+  //   const { openSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: actions.updateStatus,
+    onSuccess: () => {
+      //   openSnackbar("commentCreatedSuccess");
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    },
+    onError: (error) => {
+      console.error(error);
+      //   openSnackbar(error.message, "error");
+    },
+  });
+};
+
+export const useDeleteOrder = () => {
+  const queryClient = useQueryClient();
+  //   const { openSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: actions.deleteItem,
+    onSuccess: () => {
+      //   openSnackbar("commentCreatedSuccess");
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+    },
+    onError: (error) => {
+      console.error(error);
+      //   openSnackbar(error.message, "error");
+    },
+  });
+};

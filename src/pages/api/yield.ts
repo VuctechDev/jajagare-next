@@ -8,13 +8,16 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    const { date } = req.query;
+    const { date, lastDays } = req.query;
     if (!date) {
+      const take = (lastDays as string) ?? "";
+      console.log(take);
+
       const data = await prisma.eggs_yield.findMany({
         orderBy: {
           date: "desc",
         },
-        take: 30,
+        take: +take || 30,
       });
       const total = data.reduce((sum, entry) => sum + entry.quantity, 0);
       return res.json({ data, total: total });

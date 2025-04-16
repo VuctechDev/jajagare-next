@@ -29,7 +29,7 @@ export default async function handler(
       await prisma.orders.delete({
         where: { id },
       });
-      return res.status(204).end();
+      return res.status(200).json({ success: true });
     } catch (error) {
       console.error(error);
       return res.status(404).json({ error: "Order not found" });

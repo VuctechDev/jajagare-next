@@ -65,6 +65,8 @@ export default function SubscriptionModal({
     <Dialog
       onClose={handleClose}
       onSubmit={handleSubmit(onSubmit)}
+      cancelLabel="Ne hvala"
+      confirmLabel="Sačuvaj"
       isSubmitting={isSubmitting}
       title="Povremeno u ponudi imamo i domaću piletinu, junetinu i teletinu kao i mliječne proizvode. Ako želite da vas obavijestimo o dostupnosti ostalih naših proizvoda, ostavite nam vašu email adresu."
     >

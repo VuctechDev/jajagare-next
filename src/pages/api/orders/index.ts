@@ -9,13 +9,15 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    const { date } = req.query;
+    const { date, status } = req.query;
     if (!date) {
       const data = await prisma.orders.findMany({
         include: { user: true },
+        where: { status: status as string },
         orderBy: {
           createdAt: "desc",
         },
+        take: 100,
       });
       const total = data.reduce((sum, entry) => sum + entry.quantity, 0);
 
@@ -24,11 +26,13 @@ export default async function handler(
     const data = await prisma.orders.findMany({
       where: {
         createdAt: getDateRange(date as string),
+        status: status as string,
       },
       include: { user: true },
       orderBy: {
         createdAt: "desc",
       },
+      take: 100,
     });
     const total = data.reduce((sum, entry) => sum + entry.quantity, 0);
     return res.json({ data, total });

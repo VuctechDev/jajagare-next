@@ -31,6 +31,24 @@ const createBO = async (
   return response.data;
 };
 
-const actions = { get, create, createBO };
+const updateStatus = async (
+  id: string
+): Promise<{
+  data: OrderType;
+}> => {
+  const response = await apiClient.patch(`${path}/${id}`);
+  return response.data;
+};
+
+const deleteItem = async (
+  id: string
+): Promise<{
+  data: { success: boolean };
+}> => {
+  const response = await apiClient.delete(`${path}/${id}`);
+  return response.data;
+};
+
+const actions = { get, create, createBO, updateStatus, deleteItem };
 
 export default actions;

@@ -1,35 +1,49 @@
 import QueryPanel from "@/components/backoffice/QueryPanel";
-import OrderStatus from "@/components/backoffice/Status";
+import Dialog from "@/components/Dialog";
 import OrderFormBO from "@/components/OrderFormBO";
-import Viber from "@/icons/Viber";
-import { useGetOrders } from "@/lib/api/orders/queries";
+import {
+  useDeleteOrder,
+  useGetOrders,
+  useUpdateOrderStatus,
+} from "@/lib/api/orders/queries";
 import { eggPrice } from "@/lib/data";
-import { getDeliveryDisplayDate } from "@/lib/date";
 import { useState } from "react";
-
-const updateItem = async (orderId: string) => {
-  await fetch(`/api/orders/${orderId}`, {
-    method: "PATCH",
-  });
-};
-
-const deleteItem = async (orderId: string) => {
-  await fetch(`/api/orders/${orderId}`, {
-    method: "DELETE",
-  });
-};
+import DesktopRow from "../../components/backoffice/orders/DesktopRow";
+import MobileRow from "../../components/backoffice/orders/MobileRow";
 
 export default function OrdersPage() {
   const [query, setQuery] = useState("");
+  const [action, setAction] = useState<{
+    action: "delete" | "update";
+    id: string;
+  } | null>(null);
   const { data, isLoading } = useGetOrders(query);
+  const { mutateAsync: updateItem, isPending } = useUpdateOrderStatus();
+  const { mutateAsync: deleteItem, isPending: isDeletePending } =
+    useDeleteOrder();
 
   const onQueryUpdate = (query: string) => {
     setQuery(query);
   };
 
+  const handleModalClose = () => setAction(null);
+
+  const handleConfirm = async () => {
+    try {
+      if (action?.action === "delete") {
+        await deleteItem(action.id);
+      } else {
+        await updateItem(action?.id ?? "");
+      }
+      handleModalClose();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div>
-      <QueryPanel onQueryUpdate={onQueryUpdate} />
+      <QueryPanel onQueryUpdate={onQueryUpdate} includeStatus />
       <h2 className="p-2">
         UKUPNO KOMADA: {data.total}, VRIJEDNOST: {data.total * eggPrice}KM
       </h2>
@@ -42,8 +56,8 @@ export default function OrdersPage() {
           {isLoading ? (
             <h2>Ucitavanje...</h2>
           ) : (
-            <div className="w-full min-w-[1100px] p-3 space-y-1">
-              <div className="flex font-semibold text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-xl shadow-sm">
+            <div className="w-full p-3 space-y-1">
+              <div className="hidden md:flex font-semibold text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-xl shadow-sm">
                 <div className="w-1/7">Ime</div>
                 <div className="w-1/6">Adresa</div>
                 <div className="w-1/7">Telefon</div>
@@ -51,55 +65,28 @@ export default function OrdersPage() {
                 <div className="w-1/7">Dostava/Status</div>
                 <div className="w-1/6"></div>
               </div>
-              {data.data.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center text-sm text-gray-800 bg-white px-4 py-2 rounded-xl shadow hover:shadow-md transition"
-                >
-                  <div className="w-1/7">{item.user.name}</div>
-                  <div className="w-1/6">{item.address}</div>
-                  <div className="w-1/7">{item.user.phone || "—"}</div>
-                  <div className="w-1/9">{item.quantity ?? 0}</div>
-                  <div className="w-1/7">
-                    <OrderStatus status={item.status} />
-                    {item.status === "open" &&
-                      getDeliveryDisplayDate(item.delivery)}
-                  </div>
-
-                  <div className="w-1/6 h-[40px] flex items-center">
-                    <a
-                      href={`viber://chat?number=${
-                        item.user.phone?.startsWith("+")
-                          ? item.user.phone
-                          : "+387" + item.user.phone?.slice(1)
-                      }`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Viber />
-                    </a>
-                    {item.status === "open" && (
-                      <button
-                        className="ml-8 text-[14px] px-4 py-2 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-semibold shadow-md transition-all duration-300 cursor-pointer"
-                        onClick={() => updateItem(item.id ?? "")}
-                      >
-                        Dostavljeno
-                      </button>
-                    )}
-                    <div className="flex-grow" />
-                    <button
-                      className="ml-8 text-[14px] px-4 py-2 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-semibold shadow-md transition-all duration-300 cursor-pointer"
-                      onClick={() => deleteItem(item.id ?? "")}
-                    >
-                      Obrisi
-                    </button>
-                  </div>
+              {!data.data?.length && (
+                <div className="w-full flex justify-center p-4">
+                  Ne postoje narudzbe za odabrani filter!
                 </div>
-              ))}
+              )}
+
+              <DesktopRow data={data.data} setAction={setAction} />
+              <MobileRow data={data.data} setAction={setAction} />
             </div>
           )}
         </div>
       </div>
+      {action && (
+        <Dialog
+          onClose={handleModalClose}
+          onSubmit={handleConfirm}
+          isSubmitting={isDeletePending || isPending}
+          title={action?.action === "delete" ? "Obriši?" : "Dostavljeno?"}
+          cancelLabel="Otkaži"
+          confirmLabel="OK"
+        />
+      )}
     </div>
   );
 }
