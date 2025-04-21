@@ -11,7 +11,6 @@ export default async function handler(
     const { date, lastDays } = req.query;
     if (!date) {
       const take = (lastDays as string) ?? "";
-      console.log(take);
 
       const data = await prisma.eggs_yield.findMany({
         orderBy: {

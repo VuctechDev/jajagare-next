@@ -3,6 +3,7 @@ import QueryPanel from "@/components/backoffice/QueryPanel";
 import Button from "@/components/Button";
 import InputField from "@/components/form/InputField";
 import Snackbar from "@/components/Snackbar";
+import useApiQuery from "@/hooks/useApiQuery";
 import useFonts from "@/hooks/useFonts";
 import { useGetYield, useCreateYield } from "@/lib/api/yield/queries";
 import { eggPrice } from "@/lib/data";
@@ -133,9 +134,9 @@ const fields: {
 
 export default function UsersPage() {
   const { openSans } = useFonts();
+  const { queryString, handleQuery } = useApiQuery();
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const { data, isLoading } = useGetYield(query);
+  const { data, isLoading } = useGetYield(queryString);
   const { mutateAsync: createYield } = useCreateYield();
 
   const {
@@ -158,10 +159,6 @@ export default function UsersPage() {
     }
   };
 
-  const onQueryUpdate = (query: string) => {
-    setQuery(query);
-  };
-
   const totalChickens = data.data.reduce(
     (sum, entry) => sum + entry.chickens,
     0
@@ -169,7 +166,7 @@ export default function UsersPage() {
   const averageYield = ((data.total * 100) / totalChickens).toFixed(1);
   return (
     <div className={`w-full ${openSans}`}>
-      <QueryPanel onQueryUpdate={onQueryUpdate} month />
+      <QueryPanel handleQuery={handleQuery} month includeLastDays />
       {isLoading ? (
         <h2>Ucitavanje...</h2>
       ) : (

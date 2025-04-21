@@ -25,13 +25,14 @@ export const sendNotifEmail = {
   subscription: async (email: string) => {
     try {
       await resend.emails.send({
-        from: "Jajagare <onboarding@resend.dev>",
+        from: "Domaci Proizvodi <kontakt@domaciproizvodi.org>",
         to: "vuctechdev@gmail.com",
         subject: `Nova Subskripcija - ${email}`,
         html: `<p><strong>Email: </strong> ${email}</p>`,
       });
+      console.log("Email sent ✅");
     } catch (error) {
-      console.error(error);
+      console.error("Failed to send email ❌", error);
     }
   },
 };

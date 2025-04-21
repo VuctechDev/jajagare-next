@@ -10,21 +10,19 @@ import { eggPrice } from "@/lib/data";
 import { useState } from "react";
 import DesktopRow from "../../components/backoffice/orders/DesktopRow";
 import MobileRow from "../../components/backoffice/orders/MobileRow";
+import useApiQuery from "@/hooks/useApiQuery";
+import TableQueryPanel from "@/components/backoffice/TableQueryPanel";
 
 export default function OrdersPage() {
-  const [query, setQuery] = useState("");
   const [action, setAction] = useState<{
     action: "delete" | "update";
     id: string;
   } | null>(null);
-  const { data, isLoading } = useGetOrders(query);
+  const { queryString, handleQuery } = useApiQuery();
+  const { data, isLoading } = useGetOrders(queryString);
   const { mutateAsync: updateItem, isPending } = useUpdateOrderStatus();
   const { mutateAsync: deleteItem, isPending: isDeletePending } =
     useDeleteOrder();
-
-  const onQueryUpdate = (query: string) => {
-    setQuery(query);
-  };
 
   const handleModalClose = () => setAction(null);
 
@@ -43,7 +41,7 @@ export default function OrdersPage() {
 
   return (
     <div>
-      <QueryPanel onQueryUpdate={onQueryUpdate} includeStatus />
+      <QueryPanel handleQuery={handleQuery} includeStatus />
       <h2 className="p-2">
         UKUPNO KOMADA: {data.total}, VRIJEDNOST: {data.total * eggPrice}KM
       </h2>
@@ -57,6 +55,10 @@ export default function OrdersPage() {
             <h2>Ucitavanje...</h2>
           ) : (
             <div className="w-full p-3 space-y-1">
+              <TableQueryPanel
+                sortKeys={["createdAt", "quantity", "delivery"]}
+                handleQuery={handleQuery}
+              />
               <div className="hidden md:flex font-semibold text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-xl shadow-sm">
                 <div className="w-1/7">Ime</div>
                 <div className="w-1/6">Adresa</div>

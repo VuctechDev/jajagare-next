@@ -73,12 +73,12 @@ export default function OrderPage() {
         >
           Cijena: 10 jaja / {10 * eggPrice}KM
         </h5>
-        <h5
+        {/* <h5
           className={`text-[16px] md:text-[18px] my-2 md:my-3 text-center font-semibold text-black w-full px-3`}
         >
           Zbog velikog broja narudžbi povodom Vaskrsa, poručivanje je moguće od
           utorka, 22. aprila.{" "}
-        </h5>
+        </h5> */}
         <Form />
         <div className={`flex-grow`} />
         <Footer />

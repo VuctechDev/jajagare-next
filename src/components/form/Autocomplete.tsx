@@ -12,7 +12,7 @@ const AutocompleteInput: React.FC<AutocompleteInputProps> = ({
   name,
   onSelect,
 }) => {
-  const { data } = useGetUsers();
+  const { data } = useGetUsers("?all=true");
   const [input, setInput] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
 

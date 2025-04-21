@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
   const { openSans } = useFonts();
   return (
     <footer className="w-full pb-4 flex flex-col items-center justify-center gap-x-6 bg-[#20263E] mt-20">
-      <div className="w-full py-1 flex items-center justify-center gap-x-6">
+      <div className="w-full mt-4 mb-2 h-[60px] py-1 flex items-center justify-center gap-x-6 ">
         <a
           href="https://www.instagram.com/poruci_jaje"
           target="_blank"
@@ -24,7 +24,9 @@ const Footer: React.FC = () => {
           <Viber />
         </a>
       </div>
-
+      <p className={`text-[14px] mb-4 text-white font-semibold ${openSans}`}>
+        kontakt@domaciproizvodi.org
+      </p>
       <div className="w-full py-1 flex items-center justify-center gap-x-6">
         <Link
           className={`text-[14px] text-white font-semibold ${openSans}`}

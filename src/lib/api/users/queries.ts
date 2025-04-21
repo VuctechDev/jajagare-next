@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import actions from "./actions";
 
-export const useGetUsers = () => {
+export const useGetUsers = (query: string) => {
   return useQuery({
-    queryKey: ["users"],
-    queryFn: () => actions.get(),
+    queryKey: ["users", query],
+    queryFn: () => actions.get(query),
     initialData: { data: [], total: 0 },
   });
 };

@@ -1,10 +1,13 @@
+import TableQueryPanel from "@/components/backoffice/TableQueryPanel";
 import UserForm from "@/components/UserForm";
+import useApiQuery from "@/hooks/useApiQuery";
 import Viber from "@/icons/Viber";
 import { useGetUsers } from "@/lib/api/users/queries";
 import { getDeliveryDisplayDate } from "@/lib/date";
 
 export default function UsersPage() {
-  const { data, isLoading } = useGetUsers();
+  const { queryString, handleQuery } = useApiQuery({ sort: "lastOrder" });
+  const { data, isLoading } = useGetUsers(queryString);
 
   return (
     <div className="flex flex-col md:flex-row w-full p-2 space-y-1">
@@ -16,6 +19,10 @@ export default function UsersPage() {
           <h2>Ucitavanje...</h2>
         ) : (
           <div className="w-full min-w-[1100px] p-3 space-y-1">
+            <TableQueryPanel
+              sortKeys={["lastOrder", "quantitySum", "orderCount"]}
+              handleQuery={handleQuery}
+            />
             <div className="flex font-semibold text-sm text-gray-600 bg-gray-100 px-4 py-2 rounded-xl shadow-sm">
               <div className="w-1/7">Ime</div>
               <div className="w-1/7">Telefon</div>

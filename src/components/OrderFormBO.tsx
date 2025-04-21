@@ -79,13 +79,11 @@ export default function OrderFormBO() {
         defaultValue={20}
         className="px-4 py-3  bg-white rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#DB6D1D] shadow-md transition-all duration-200"
       >
-        {Array.from({ length: 25 }, (_, i) =>
-          i !== 0 ? (
-            <option value={i * 10 + 10} key={i}>
-              {i * 10 + 10} jaja / {i * displayPrice + displayPrice}KM
-            </option>
-          ) : null
-        )}
+        {Array.from({ length: 25 }, (_, i) => (
+          <option value={i * 10 + 10} key={i}>
+            {i * 10 + 10} jaja / {i * displayPrice + displayPrice}KM
+          </option>
+        ))}
       </select>
       <select
         {...register("delivery", { required: false })}

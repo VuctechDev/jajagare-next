@@ -3,36 +3,40 @@ import prisma from "../../../lib/prisma";
 import { sendNotifEmail } from "@/lib/resend";
 import { getDateRange } from "@/lib/date";
 import { handleUser } from "@/lib/user";
+import { queryHandler } from "@/lib/queryHandler";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    const { date, status } = req.query;
+    const { date, status, take, sort } = queryHandler(req.query);
+    console.log(queryHandler(req.query));
+
     if (!date) {
       const data = await prisma.orders.findMany({
         include: { user: true },
-        where: { status: status as string },
+        where: { status },
         orderBy: {
-          createdAt: "desc",
+          [sort]: "desc",
         },
-        take: 100,
+        take: +take,
       });
       const total = data.reduce((sum, entry) => sum + entry.quantity, 0);
 
       return res.json({ data, total });
     }
+
     const data = await prisma.orders.findMany({
       where: {
-        createdAt: getDateRange(date as string),
-        status: status as string,
+        createdAt: getDateRange(date),
+        status: status,
       },
       include: { user: true },
       orderBy: {
-        createdAt: "desc",
+        [sort]: "desc",
       },
-      take: 100,
+      take: +take,
     });
     const total = data.reduce((sum, entry) => sum + entry.quantity, 0);
     return res.json({ data, total });

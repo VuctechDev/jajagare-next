@@ -3,11 +3,13 @@ import { apiClient } from "..";
 
 const path = "/users";
 
-const get = async (): Promise<{
+const get = async (
+  query: string
+): Promise<{
   data: UserBOType[];
   total: number;
 }> => {
-  const response = await apiClient.get(`${path}`);
+  const response = await apiClient.get(`${path}${query}`);
   return response.data;
 };
 

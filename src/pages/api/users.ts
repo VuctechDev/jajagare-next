@@ -1,13 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../lib/prisma";
-import { Prisma } from "@prisma/client";
+import { queryHandler } from "@/lib/queryHandler";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    const enrichedUsersRaw = await prisma.$queryRaw<
+    const { sort, all } = queryHandler(req.query);
+    if (all) {
+      const users = await prisma.users.findMany();
+      return res.json({ data: users, total: users.length });
+    }
+    const enrichedUsersRaw = await prisma.$queryRawUnsafe<
       {
         id: string;
         name: string;
@@ -17,20 +22,20 @@ export default async function handler(
         quantitySum: bigint;
         lastOrder: Date | null;
       }[]
-    >(Prisma.sql`
-      SELECT
-        u.id,
-        u.name,
-        u.phone,
-        u.email,
-        COUNT(o.id) AS "orderCount",
-        COALESCE(SUM(o.quantity), 0) AS "quantitySum",
-        MAX(o."createdAt") AS "lastOrder"
-      FROM "users" u
-      LEFT JOIN "orders" o ON u.id = o."userId"
-      GROUP BY u.id
-      ORDER BY "lastOrder" DESC NULLS LAST
-    `);
+    >(`
+        SELECT
+          u.id,
+          u.name,
+          u.phone,
+          u.email,
+          COUNT(o.id) AS "orderCount",
+          COALESCE(SUM(o.quantity), 0) AS "quantitySum",
+          MAX(o."createdAt") AS "lastOrder"
+        FROM "users" u
+        LEFT JOIN "orders" o ON u.id = o."userId"
+        GROUP BY u.id
+        ORDER BY "${sort}" DESC NULLS LAST
+      `);
 
     const enrichedUsers = enrichedUsersRaw.map((user) => ({
       ...user,
