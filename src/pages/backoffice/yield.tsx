@@ -132,9 +132,9 @@ const fields: {
   },
 ];
 
-export default function UsersPage() {
+export default function YieldPage() {
   const { openSans } = useFonts();
-  const { queryString, handleQuery } = useApiQuery();
+  const { queryString, handleQuery } = useApiQuery({ sort: "date" });
   const [open, setOpen] = useState(false);
   const { data, isLoading } = useGetYield(queryString);
   const { mutateAsync: createYield } = useCreateYield();

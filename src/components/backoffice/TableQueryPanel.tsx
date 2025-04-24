@@ -21,7 +21,6 @@ const TableQueryPanel: React.FC<Props> = ({ sortKeys, handleQuery }) => {
         onChange={(e) => handleQuery({ sort: e.target.value })}
         className="w-[100px] bg-white md:w-[140px] h-[30px] px-4 py-0 rounded-2xl text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 shadow-md transition-all duration-200"
       >
-        {/* <option value={""}>Sortiraj po</option> */}
         {sortKeys.map((option) => (
           <option key={option} value={option}>
             {labels[option]}
