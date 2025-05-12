@@ -59,10 +59,7 @@ const DisplayError = ({
 };
 
 export default function OrderForm() {
-  const deliveryDays = useMemo(
-    () => getDeliveryDays(4, [2, 6], "2025-04-21"),
-    []
-  );
+  const deliveryDays = useMemo(() => getDeliveryDays(4, [2, 6]), []);
   const [open, setOpen] = useState(false);
   const {
     register,

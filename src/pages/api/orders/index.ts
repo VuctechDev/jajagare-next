@@ -16,7 +16,7 @@ export default async function handler(
     if (!date) {
       const data = await prisma.orders.findMany({
         include: { user: true },
-        where: { status },
+        where: { status, userId: {not: "b8380558-b8ce-48f1-862c-6d155f63bcd6"} },
         orderBy: {
           [sort]: "desc",
         },

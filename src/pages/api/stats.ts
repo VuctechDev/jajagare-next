@@ -27,6 +27,7 @@ export default async function handler(
       },
       where: {
         status: "done",
+        userId: { not: "b8380558-b8ce-48f1-862c-6d155f63bcd6" },
       },
     });
 
